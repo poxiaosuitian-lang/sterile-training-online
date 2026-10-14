@@ -32,11 +32,27 @@ API 以非 root 用户运行；启动时自动执行数据库迁移。PostgreSQL
 
 ## 账号与成绩
 
-玩家在“无菌方舟”联网 APK 注册账号和密码。尚未预设地址的 APK 需在登录页填写完整 API 地址。管理员账号来自服务器环境配置，与玩家账号相互独立。
+玩家在“无菌方舟”联网 APK 注册账号和密码。1.0.86 起的联网 APK 已预设 `https://wu.yikui.fun/api/v1`；旧 APK 需要填写该地址才能连接。管理员账号来自服务器环境配置，与玩家账号相互独立。
 
 后台支持账号和昵称搜索、分页、五关完成度、最高分、挑战记录及 CSV 导出。开始次数包含未提交挑战；提交次数是服务端已结算次数。成绩按玩家保存，不按 APK 版本分组。
 
 客户端上传失败会暂存结果，在前台定时、返回应用或手动同步时重试；应用退出后不持续后台上传。登录过期时重新登录原账号补传。服务器保存提交回执，重复和并发重试只结算一次。普通联网玩家不能启用开发者跳关，游客登录默认禁用。
+
+## 从 GitHub 更新服务器上的 APK
+
+开发机把同签名 APK、`latest.json` 和 `SHA256SUMS` 发布到 GitHub Release 后，在服务器执行（需要 Python 3，且能访问 GitHub 及其下载域名）：
+
+```sh
+cd /opt/sterile-training-online
+git pull --ff-only
+python3 tools/update_apk.py
+```
+
+脚本从此仓库最新正式 Release 下载安装包、校验 SHA-256，先放好 APK，再原子替换 `deploy/releases/latest.json`。重复执行不会重复下载完整的同版安装包，不会降级到更旧版本；网络失败或校验失败时保留原更新清单。不需要重启 Docker。
+
+运行后访问 `https://wu.yikui.fun/api/v1/app/release` 检查版本号。已经连接该服务器的旧版用户重新启动应用时会收到更新提示；还没配置地址的旧 APK 需先填写地址，或手动安装新版。仅执行 `git pull` 不会下载 Release 附件，也不会自动更新玩家手机里的 APK。
+
+如果服务器不能访问 GitHub，可从 [Release 页面](https://github.com/poxiaosuitian-lang/sterile-training-online/releases/latest) 下载附件后手动上传；先 APK、后 `latest.json`。
 
 ## 发布 APK 更新
 

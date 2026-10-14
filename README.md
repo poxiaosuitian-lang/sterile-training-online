@@ -2,7 +2,7 @@
 
 为“无菌方舟”Android 应用提供账号、五关训练评分、成绩同步、排行榜、管理后台和 APK 更新接口。
 
-此仓库用于服务器 Docker 部署，包含 NestJS API、网页管理后台、Prisma 数据库迁移及测试。Android 客户端单独分发；安装后应用名称为 **无菌方舟**。客户端尚未预设正式地址，部署后在登录页填写 `https://你的域名/api/v1`。
+此仓库用于服务器 Docker 部署，包含 NestJS API、网页管理后台、Prisma 数据库迁移及测试。Android 客户端单独分发；安装后应用名称为 **无菌方舟**。联网 APK 从 1.0.86 起预设正式地址 `https://wu.yikui.fun/api/v1`，玩家无需手填。安装包见 [GitHub Releases](https://github.com/poxiaosuitian-lang/sterile-training-online/releases/latest)。
 
 ## Docker 部署
 

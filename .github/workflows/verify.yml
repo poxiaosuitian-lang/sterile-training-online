@@ -31,5 +31,6 @@ jobs:
       - run: npx prisma generate
       - run: npm test
       - run: npm run build
+      - run: python3 -m unittest discover -s tools -p 'test_update_apk.py'
       - run: node tools/test_online_integration.cjs
       - run: docker build -t sterile-training-online:ci .
