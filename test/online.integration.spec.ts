@@ -1,0 +1,116 @@
+import { Test } from '@nestjs/testing';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { AppModule } from '../src/app.module';
+import { RedisService } from '../src/redis/redis.service';
+import { PrismaService } from '../src/database/prisma.service';
+import * as contract from '../src/levels/standalone-contract.json';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+
+const suite = process.env.RUN_ONLINE_INTEGRATION === 'true' ? describe : describe.skip;
+suite('Online accounts, persistence and administration over HTTP', () => {
+  let app: INestApplication;
+  let base: string;
+  let alice: string, bob: string, admin: string, aliceId: string;
+  const request = async (path:string, method='GET', body?:unknown, token?:string) => {
+    const r = await fetch(base+path,{method,headers:{'Content-Type':'application/json',
+      ...(token ? {Authorization:`Bearer ${token}`} : {})},body:body ? JSON.stringify(body):undefined});
+    const text = await r.text();
+    let data: any; try {data=JSON.parse(text);} catch {data=text;}
+    return {status:r.status,data};
+  };
+  beforeAll(async () => {
+    const module = await Test.createTestingModule({imports:[AppModule]})
+      .overrideProvider(RedisService).useValue({client:{
+        multi: () => {throw new Error('integration test uses database fallback');},
+        zRangeWithScores: async () => [], hGetAll:async () => ({}),
+      }}).compile();
+    app=module.createNestApplication();
+    app.setGlobalPrefix('api/v1');
+    app.useGlobalPipes(new ValidationPipe({whitelist:true,forbidNonWhitelisted:true,transform:true}));
+    await app.listen(0,'127.0.0.1');
+    base=await app.getUrl()+'/api/v1';
+  },30000);
+  afterAll(async () => { if(app) await app.close(); });
+  it('registers independent accounts and rejects duplicate or invalid credentials',async () => {
+    const a=await request('/auth/register','POST',{username:'Alice',password:'test-password-123',nickname:'测试甲'});
+    const b=await request('/auth/register','POST',{username:'bob',password:'test-password-456',nickname:'测试乙'});
+    expect(a.status).toBe(201);expect(b.status).toBe(201);
+    alice=a.data.accessToken;bob=b.data.accessToken;aliceId=a.data.player.id;
+    expect(aliceId).not.toBe(b.data.player.id);
+    expect(a.data.player.passwordHash).toBeUndefined();
+    expect((await request('/auth/register','POST',{username:'alice',password:'test-password-123',nickname:'重复'})).status).toBe(409);
+    expect((await request('/auth/login','POST',{username:'alice',password:'wrong-password'})).status).toBe(401);
+    const login=await request('/auth/login','POST',{username:'ALICE',password:'test-password-123'});
+    expect(login.status).toBe(201);expect(login.data.player.id).toBe(aliceId);
+    expect((await request('/auth/guest','POST',{deviceId:'device-test-123',nickname:'游客'})).status).toBe(403);
+  });
+  it('requires auth, isolates users and rejects developer bypass',async () => {
+    expect((await request('/game/progress')).status).toBe(401);
+    expect((await request('/game/levels/level-2-glove-forceps-hunt/start','POST',{},alice)).status).toBe(403);
+    expect((await request('/game/levels/level-2-glove-forceps-hunt/start','POST',{developerMode:true},alice)).status).toBe(403);
+  });
+  it('stores one result for simultaneous retries and keeps another player untouched',async () => {
+    const start=await request('/game/levels/level-1-concept/start','POST',{},alice);
+    expect(start.status).toBe(201);
+    const input={challengeNonce:start.data.challenge.nonce,result:contract.gradingExamples[0].input};
+    const path=`/game/sessions/${start.data.sessionId}/submit`;
+    expect((await request(path,'POST',input,bob)).status).toBe(404);
+    const results=await Promise.all([request(path,'POST',input,alice),request(path,'POST',input,alice)]);
+    for(const result of results){expect(result.status).toBe(201);expect(result.data.score).toBe(100);}
+    expect(results[0].data).toEqual(results[1].data);
+    expect((await request(path,'POST',{...input,challengeNonce:'wrong'},alice)).status).toBe(400);
+    const p=(await request('/game/progress','GET',undefined,alice)).data;
+    expect(p[0].progress).toMatchObject({completed:true,attempts:1,bestScore:100});
+    expect(p[1].progress.unlocked).toBe(true);
+    const untouched=(await request('/game/progress','GET',undefined,bob)).data;
+    expect(untouched[0].progress.completed).toBe(false);
+    expect(untouched[1].progress.unlocked).toBe(false);
+    expect(await app.get(PrismaService).scoreEvent.count({where:{playerId:aliceId}})).toBe(1);
+  });
+  it('protects administrative data and serves player totals, history and CSV',async () => {
+    expect((await request('/admin/players','GET',undefined,alice)).status).toBe(401);
+    const login=await request('/admin/login','POST',{username:process.env.ADMIN_USERNAME,password:process.env.ADMIN_PASSWORD});
+    expect(login.status).toBe(201);admin=login.data.accessToken;
+    expect((await request('/game/progress','GET',undefined,admin)).status).toBe(401);
+    const players=(await request('/admin/players','GET',undefined,admin)).data;
+    expect(players.total).toBe(2);
+    const a=players.players.find((p:any)=>p.id===aliceId);
+    expect(a).toMatchObject({completed:1,completionRate:20,totalScore:100});
+    expect(a.passwordHash).toBeUndefined();
+    const sessions=(await request(`/admin/players/${aliceId}/sessions`,'GET',undefined,admin)).data;
+    expect(sessions.items[0]).toMatchObject({status:'COMPLETED',score:100});
+    const csv=await request('/admin/export','GET',undefined,admin);
+    expect(csv.status).toBe(200);expect(csv.data).toContain('测试甲');
+    expect((await request('/admin')).data).toContain('测试管理');
+    expect((await request('/app/release')).data.versionCode).toBe(0);
+  });
+  (process.env.RUN_ADMIN_UI === 'true' ? it : it.skip)('operates the admin dashboard in Chromium', async () => {
+    await promisify(execFile)('python',['tools/test_admin_ui.py'],{
+      env:{...process.env,ADMIN_URL:base+'/admin'},timeout:45000,
+    });
+  },60000);
+
+  it('completes all five current lessons through authenticated HTTP submissions', async () => {
+    for (const level of contract.levels.slice(1)) {
+      const start = await request(`/game/levels/${level.id}/start`, 'POST', {}, alice);
+      expect(start.status).toBe(201);
+      const example = contract.gradingExamples.find(e => e.levelId === level.id && e.score === 100)!;
+      const result: Record<string, unknown> = { ...example.input };
+      if (level.kind === 'maze_quiz') {
+        result.answers = Object.fromEntries(start.data.level.publicConfig.questions.map(
+          (q: { id: string; acceptedAnswers: string[] }) => [q.id, q.acceptedAnswers[0]],
+        ));
+      }
+      const response = await request(`/game/sessions/${start.data.sessionId}/submit`, 'POST', {
+        challengeNonce: start.data.challenge.nonce, result,
+      }, alice);
+      expect(response.status).toBe(201);
+      expect(response.data).toMatchObject({ passed: true, score: 100 });
+    }
+    const progress = (await request('/game/progress', 'GET', undefined, alice)).data;
+    expect(progress).toHaveLength(5);
+    expect(progress.every((l: { progress: { completed: boolean } }) => l.progress.completed)).toBe(true);
+    expect((await request('/leaderboards/overall')).data[0]).toMatchObject({ playerId: aliceId, score: 500 });
+  });
+});

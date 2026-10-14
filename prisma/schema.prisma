@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SessionStatus {
+  ACTIVE
+  COMPLETED
+  FAILED
+  EXPIRED
+}
+
+model Player {
+  id          String          @id @default(uuid())
+  deviceId    String          @unique
+  nickname    String
+  username    String?         @unique
+  passwordHash String?
+  lastLoginAt DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  sessions    GameSession[]
+  progress    LevelProgress[]
+  scoreEvents ScoreEvent[]
+}
+
+model GameSession {
+  id          String        @id @default(uuid())
+  playerId    String
+  levelId     String
+  levelVersion Int
+  status      SessionStatus @default(ACTIVE)
+  challenge   Json
+  submission  Json?
+  receipt     Json?
+  score       Int?
+  stars       Int?
+  startedAt   DateTime      @default(now())
+  expiresAt   DateTime
+  completedAt DateTime?
+  player      Player        @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId, status])
+  @@index([levelId, score])
+}
+
+model LevelProgress {
+  id          String   @id @default(uuid())
+  playerId    String
+  levelId     String
+  unlocked    Boolean  @default(false)
+  completed   Boolean  @default(false)
+  attempts    Int      @default(0)
+  bestScore   Int      @default(0)
+  bestStars   Int      @default(0)
+  completedAt DateTime?
+  updatedAt   DateTime @updatedAt
+  player      Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, levelId])
+  @@index([levelId, bestScore])
+}
+
+model ScoreEvent {
+  id        String   @id @default(uuid())
+  playerId  String
+  levelId   String
+  score     Int
+  stars     Int
+  createdAt DateTime @default(now())
+  player    Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([levelId, score])
+  @@index([playerId, createdAt])
+}

@@ -1,0 +1,10 @@
+{$SITE_ADDRESS} {
+    encode gzip zstd
+    redir / /api/v1/admin 302
+    reverse_proxy api:3000
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy same-origin
+        X-Frame-Options DENY
+    }
+}

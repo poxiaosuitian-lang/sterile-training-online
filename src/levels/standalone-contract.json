@@ -1,0 +1,1843 @@
+{
+  "levels": [
+    {
+      "id": "level-1-concept",
+      "order": 1,
+      "version": 17,
+      "title": "第一关：概念原则大闯关",
+      "subtitle": "通过气泡消除掌握无菌知识",
+      "kind": "concept_challenge",
+      "description": "连接知识词块，跟随护士完成环境与个人准备，再完成物品分区与八类物品开封后有效期贴标签训练。",
+      "timeLimitSeconds": 0,
+      "passScore": 60,
+      "starThresholds": [
+        60,
+        80,
+        95
+      ],
+      "assetKeys": [],
+      "instructions": [
+        "完成概念、操作前准备和物品管理训练"
+      ],
+      "publicConfig": {}
+    },
+    {
+      "id": "level-2-glove-forceps-hunt",
+      "order": 2,
+      "version": 6,
+      "title": "第二关：手套钳具找茬赛",
+      "subtitle": "根据无菌操作注意事项找出错误",
+      "kind": "error_hunt",
+      "description": "辨认四种无菌持物钳，排查存放、操作和戴脱手套中的问题。",
+      "timeLimitSeconds": 0,
+      "passScore": 60,
+      "starThresholds": [
+        60,
+        80,
+        95
+      ],
+      "assetKeys": [],
+      "instructions": [
+        "依次完成器械辨认、存放排查、操作排查、戴脱手套四个场景"
+      ],
+      "publicConfig": {}
+    },
+    {
+      "id": "level-3-container-maze",
+      "order": 3,
+      "version": 6,
+      "title": "第三关：无菌容器迷宫行",
+      "subtitle": "收集7个知识碎片并找到出口",
+      "kind": "maze_quiz",
+      "description": "探索医院平面图，随机挑战选择题和填空题，收集七个知识碎片。",
+      "timeLimitSeconds": 0,
+      "passScore": 60,
+      "starThresholds": [
+        60,
+        80,
+        95
+      ],
+      "assetKeys": [],
+      "instructions": [
+        "答题收集7个碎片并到达出口"
+      ],
+      "publicConfig": {
+        "fragmentCount": 7,
+        "collisionPenalty": 15,
+        "pathHint": true,
+        "questions": [
+          {
+            "id": "q1",
+            "type": "single_choice",
+            "sourceId": "mc1",
+            "options": [
+              "握住容器边缘",
+              "托住容器底部",
+              "抓住容器盖子",
+              "用手覆盖容器口"
+            ],
+            "text": "手持无菌容器时，正确的持法是？",
+            "acceptedAnswers": [
+              "B"
+            ],
+            "learningContent": "手持无菌容器应托住底部，避免触及容器边缘及内面。",
+            "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+          },
+          {
+            "id": "q2",
+            "type": "single_choice",
+            "sourceId": "mc2",
+            "options": [
+              "将盖子直接翻转放在桌上",
+              "将盖子平移离开容器，内面向上放置",
+              "将盖子倒置在容器旁",
+              "用手握住盖子边缘"
+            ],
+            "text": "打开无菌容器盖时，正确的做法是？",
+            "acceptedAnswers": [
+              "B",
+              "C"
+            ],
+            "learningContent": "盖内面应朝上放在稳妥处，手不可触及内面及边缘。原题 B 与 C 表述重合，均予认可。",
+            "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+          },
+          {
+            "id": "q3",
+            "type": "single_choice",
+            "sourceId": "mc3",
+            "options": [
+              "暂时不盖，以便下次取物",
+              "立即将盖盖严",
+              "等所有物品用完后再盖",
+              "只盖一半"
+            ],
+            "text": "取物后，应该如何处理无菌容器盖？",
+            "acceptedAnswers": [
+              "B"
+            ],
+            "learningContent": "取物后立即盖严无菌容器。",
+            "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+          },
+          {
+            "id": "q4",
+            "type": "single_choice",
+            "sourceId": "mc4",
+            "options": [
+              "倾斜夹取，避免触碰容器",
+              "垂直夹取，避免触及容器边缘",
+              "快速夹取，无需担心触碰",
+              "使用手直接取物"
+            ],
+            "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
+            "acceptedAnswers": [
+              "B"
+            ],
+            "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
+            "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+          },
+          {
+            "id": "q5",
+            "type": "single_choice",
+            "sourceId": "mc5",
+            "options": [
+              "包布的内面",
+              "包布四角的外面",
+              "包内无菌物品",
+              "包布的任意部分"
+            ],
+            "text": "打开无菌包时，手可以接触包布的哪个部分？",
+            "acceptedAnswers": [
+              "B"
+            ],
+            "learningContent": "打开无菌包时，手只能接触包布四角的外面，不可触及内面或包内物品。",
+            "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+          },
+          {
+            "id": "q6",
+            "type": "fill_blank",
+            "sourceId": "mb6",
+            "text": "无菌包的包布通常选用____材料制成。",
+            "acceptedAnswers": [
+              "质厚、致密、未脱脂的双层棉布或医用无纺",
+              "质厚、致密、未脱脂的双层棉布或医用无纺材料"
+            ],
+            "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
+            "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+          },
+          {
+            "id": "q7",
+            "type": "fill_blank",
+            "sourceId": "mb7",
+            "text": "使用无菌容器前，应检查并核对____、____、____、____。",
+            "acceptedAnswers": [
+              "容器名称、灭菌日期、失效期、灭菌标识",
+              "容器名称、灭菌日期、有效期、灭菌标识"
+            ],
+            "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
+            "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "level-4-solution-stacking",
+      "order": 4,
+      "version": 2,
+      "title": "第四关：无菌溶液叠叠乐",
+      "subtitle": "合成高阶方块净化污染",
+      "kind": "block_stacking_defense",
+      "description": "拖动绿色无菌方块合成高阶方块并控制污染。",
+      "timeLimitSeconds": 0,
+      "passScore": 60,
+      "starThresholds": [
+        60,
+        80,
+        95
+      ],
+      "assetKeys": [],
+      "instructions": [
+        "在两个操作区完成合成并控制污染"
+      ],
+      "publicConfig": {}
+    },
+    {
+      "id": "level-5-space-guardian",
+      "order": 5,
+      "version": 3,
+      "title": "第五关：无菌空间守护者",
+      "subtitle": "运用单双巾铺盘技巧守护无菌空间",
+      "kind": "space_guardian",
+      "description": "消除病毒、移除障碍并成功构建无菌区域。",
+      "timeLimitSeconds": 0,
+      "passScore": 60,
+      "starThresholds": [
+        60,
+        80,
+        95
+      ],
+      "assetKeys": [],
+      "instructions": [
+        "完成细菌清除和障碍物移除两个区域"
+      ],
+      "publicConfig": {}
+    }
+  ],
+  "answerKeys": {
+    "level-1-concept": {
+      "correctSentences": [
+        [
+          "在医疗、护理操作过程中",
+          "防止一切微生物侵入人体和",
+          "防止无菌物品、无菌区域被污染的技术"
+        ],
+        [
+          "经灭菌处理",
+          "且未被污染的区域"
+        ],
+        [
+          "未经灭菌处理",
+          "或虽经灭菌处理",
+          "但又被污染的区域"
+        ],
+        [
+          "通过灭菌处理后",
+          "保持无菌状态的物品"
+        ],
+        [
+          "未经灭菌处理",
+          "或虽经灭菌处理后",
+          "又被污染的物品"
+        ]
+      ],
+      "toolSequence": [
+        "preparation_timing",
+        "environment_sweeping",
+        "scheduled_disinfection",
+        "table_preparation",
+        "trim_nails",
+        "hand_hygiene",
+        "wear_uniform",
+        "wear_cap",
+        "wear_mask",
+        "supplies_layout"
+      ],
+      "openedItemAnswers": {
+        "opened_swabs": "24h",
+        "opened_solution": "24h",
+        "opened_disinfectants": "7d",
+        "dry_forceps": "4h",
+        "prepared_tray": "4h",
+        "opened_pack": "24h",
+        "used_container": "max24h",
+        "opened_gauze": "4h"
+      },
+      "itemClassification": {
+        "opened_gauze": "sterile_storage",
+        "gloves": "non_sterile_storage",
+        "dry_forceps": "sterile_storage",
+        "bandage": "non_sterile_storage",
+        "opened_pack": "sterile_storage",
+        "medical_mask": "non_sterile_storage",
+        "sterile_syringe": "sterile_storage",
+        "opened_disinfectants": "non_sterile_storage",
+        "opened_swabs": "sterile_storage",
+        "cleaning_broom": "non_sterile_storage",
+        "sterile_catheter_kit": "sterile_storage",
+        "opened_solution": "sterile_storage",
+        "prepared_tray": "sterile_storage",
+        "used_container": "sterile_storage",
+        "crepe_instrument_pack": "sterile_storage",
+        "medical_waste_bag": "non_sterile_storage"
+      },
+      "storageKnowledgeAnswers": [
+        14,
+        7,
+        30,
+        180,
+        180,
+        180,
+        180
+      ]
+    },
+    "level-2-glove-forceps-hunt": {
+      "forceps_types_errors": [
+        "oval_forceps",
+        "three_prong_forceps",
+        "long_tweezers",
+        "short_tweezers"
+      ],
+      "instrument_storage_errors": [
+        "multiple_forceps",
+        "inverted_lid",
+        "small_unchanged_indicator",
+        "contaminated_swabs"
+      ],
+      "forceps_operation_errors": [
+        "insufficient_immersion",
+        "incorrect_grip",
+        "tip_touches_rim",
+        "missing_indicator"
+      ],
+      "glove_procedure_errors": [
+        "below_waist",
+        "gloved_touches_bare_hand",
+        "donning_touches_inside",
+        "removing_touches_inside"
+      ]
+    }
+  },
+  "huntStages": [
+    {
+      "id": "forceps_types",
+      "name": "持物钳 · 种类辨认",
+      "targetCount": 4,
+      "timeLimitSeconds": 30
+    },
+    {
+      "id": "instrument_storage",
+      "name": "持物钳 · 存放排查",
+      "targetCount": 4,
+      "timeLimitSeconds": 40
+    },
+    {
+      "id": "forceps_operation",
+      "name": "持物钳 · 操作排查",
+      "targetCount": 4,
+      "timeLimitSeconds": 40
+    },
+    {
+      "id": "glove_procedure",
+      "name": "手套 · 戴脱排查",
+      "targetCount": 4,
+      "timeLimitSeconds": 60
+    }
+  ],
+  "mazeBonusQuestions": [
+    {
+      "id": "mc8",
+      "type": "single_choice",
+      "sourceId": "mc8",
+      "options": [
+        "包内物品超过有效期",
+        "包布受潮",
+        "无菌包被污染",
+        "以上所有情况"
+      ],
+      "text": "在什么情况下，无菌包需要重新灭菌？",
+      "acceptedAnswers": [
+        "D"
+      ],
+      "learningContent": "无菌包过期、受潮或被污染时，均需重新灭菌。",
+      "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+    },
+    {
+      "id": "mc10",
+      "type": "single_choice",
+      "sourceId": "mc10",
+      "options": [
+        "12小时",
+        "4小时",
+        "24小时",
+        "直至包内物品用完"
+      ],
+      "text": "如果只取用了无菌包内的部分物品，剩余物品的有效期是多久？",
+      "acceptedAnswers": [
+        "C"
+      ],
+      "learningContent": "剩余物品未污染时，按原折痕包好并注明开包日期及时间，限24小时内使用。",
+      "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+    },
+    {
+      "id": "mb9",
+      "type": "fill_blank",
+      "sourceId": "mb9",
+      "text": "取出包内部分物品后，重新包好时应注明____及____，限24小时内使用。",
+      "acceptedAnswers": [
+        "开包日期、时间",
+        "开包日期及时间",
+        "开包日期和时间"
+      ],
+      "learningContent": "取出包内部分物品后，重新包好时应注明开包日期及时间，限24小时内使用。",
+      "learningAsset": "assets/generated/sprites/components/label_sticker.png"
+    },
+    {
+      "id": "mb11",
+      "type": "fill_blank",
+      "sourceId": "mb11",
+      "text": "无菌容器应定期消毒灭菌；初次使用后，有效期不超过____小时。",
+      "acceptedAnswers": [
+        "24",
+        "二十四",
+        "24小时",
+        "二十四小时",
+        "24h"
+      ],
+      "learningContent": "无菌容器应定期消毒灭菌；初次使用后，有效期不超过24小时。",
+      "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+    },
+    {
+      "id": "mb12",
+      "type": "fill_blank",
+      "sourceId": "mb12",
+      "text": "开盖时，手不可触及盖的____及____。",
+      "acceptedAnswers": [
+        "边缘、内面",
+        "边缘及内面",
+        "边缘和内面"
+      ],
+      "learningContent": "开盖时，手不可触及盖的边缘及内面。",
+      "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+    },
+    {
+      "id": "mb13",
+      "type": "fill_blank",
+      "sourceId": "mb13",
+      "text": "打开无菌包时，不可____无菌区。",
+      "acceptedAnswers": [
+        "跨越"
+      ],
+      "learningContent": "打开无菌包时，不可跨越无菌区。",
+      "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+    }
+  ],
+  "gradingExamples": [
+    {
+      "levelId": "level-1-concept",
+      "input": {
+        "sentences": [
+          [
+            "在医疗、护理操作过程中",
+            "防止一切微生物侵入人体和",
+            "防止无菌物品、无菌区域被污染的技术"
+          ],
+          [
+            "经灭菌处理",
+            "且未被污染的区域"
+          ],
+          [
+            "未经灭菌处理",
+            "或虽经灭菌处理",
+            "但又被污染的区域"
+          ],
+          [
+            "通过灭菌处理后",
+            "保持无菌状态的物品"
+          ],
+          [
+            "未经灭菌处理",
+            "或虽经灭菌处理后",
+            "又被污染的物品"
+          ]
+        ],
+        "toolsUsed": [
+          "preparation_timing",
+          "environment_sweeping",
+          "scheduled_disinfection",
+          "table_preparation",
+          "trim_nails",
+          "hand_hygiene",
+          "wear_uniform",
+          "wear_cap",
+          "wear_mask",
+          "supplies_layout"
+        ],
+        "openedItemAnswers": {
+          "opened_swabs": "24h",
+          "opened_solution": "24h",
+          "opened_disinfectants": "7d",
+          "dry_forceps": "4h",
+          "prepared_tray": "4h",
+          "opened_pack": "24h",
+          "used_container": "max24h",
+          "opened_gauze": "4h"
+        },
+        "itemClassification": {
+          "opened_gauze": "sterile_storage",
+          "gloves": "non_sterile_storage",
+          "dry_forceps": "sterile_storage",
+          "bandage": "non_sterile_storage",
+          "opened_pack": "sterile_storage",
+          "medical_mask": "non_sterile_storage",
+          "sterile_syringe": "sterile_storage",
+          "opened_disinfectants": "non_sterile_storage",
+          "opened_swabs": "sterile_storage",
+          "cleaning_broom": "non_sterile_storage",
+          "sterile_catheter_kit": "sterile_storage",
+          "opened_solution": "sterile_storage",
+          "prepared_tray": "sterile_storage",
+          "used_container": "sterile_storage",
+          "crepe_instrument_pack": "sterile_storage",
+          "medical_waste_bag": "non_sterile_storage"
+        },
+        "storageKnowledgeAnswers": [
+          14,
+          7,
+          30,
+          180,
+          180,
+          180,
+          180
+        ],
+        "storageEnvironment": {
+          "temperature": 22,
+          "humidity": 50,
+          "airChanges": 6
+        },
+        "expirationValidation": true,
+        "mistakes": 0,
+        "wrongTaps": 0,
+        "wrongZonePlacements": 0
+      },
+      "questions": null,
+      "score": 100,
+      "passed": true
+    },
+    {
+      "levelId": "level-1-concept",
+      "input": {
+        "sentences": [
+          [
+            "在医疗、护理操作过程中",
+            "防止一切微生物侵入人体和",
+            "防止无菌物品、无菌区域被污染的技术"
+          ],
+          [
+            "经灭菌处理",
+            "且未被污染的区域"
+          ],
+          [
+            "未经灭菌处理",
+            "或虽经灭菌处理",
+            "但又被污染的区域"
+          ],
+          [
+            "通过灭菌处理后",
+            "保持无菌状态的物品"
+          ],
+          [
+            "未经灭菌处理",
+            "或虽经灭菌处理后",
+            "又被污染的物品"
+          ]
+        ],
+        "toolsUsed": [
+          "preparation_timing",
+          "environment_sweeping",
+          "scheduled_disinfection",
+          "table_preparation",
+          "trim_nails",
+          "hand_hygiene",
+          "wear_uniform",
+          "wear_cap",
+          "wear_mask",
+          "supplies_layout"
+        ],
+        "openedItemAnswers": {
+          "opened_swabs": "24h",
+          "opened_solution": "24h",
+          "opened_disinfectants": "7d",
+          "dry_forceps": "4h",
+          "prepared_tray": "4h",
+          "opened_pack": "24h",
+          "used_container": "max24h",
+          "opened_gauze": "4h"
+        },
+        "itemClassification": {
+          "opened_gauze": "sterile_storage",
+          "gloves": "non_sterile_storage",
+          "dry_forceps": "sterile_storage",
+          "bandage": "non_sterile_storage",
+          "opened_pack": "sterile_storage",
+          "medical_mask": "non_sterile_storage",
+          "sterile_syringe": "sterile_storage",
+          "opened_disinfectants": "non_sterile_storage",
+          "opened_swabs": "sterile_storage",
+          "cleaning_broom": "non_sterile_storage",
+          "sterile_catheter_kit": "sterile_storage",
+          "opened_solution": "sterile_storage",
+          "prepared_tray": "sterile_storage",
+          "used_container": "sterile_storage",
+          "crepe_instrument_pack": "sterile_storage",
+          "medical_waste_bag": "non_sterile_storage"
+        },
+        "storageKnowledgeAnswers": [
+          14,
+          7,
+          30,
+          180,
+          180,
+          180,
+          180
+        ],
+        "storageEnvironment": {
+          "temperature": 22,
+          "humidity": 50,
+          "airChanges": 6
+        },
+        "expirationValidation": true,
+        "mistakes": 1,
+        "wrongTaps": 1,
+        "wrongZonePlacements": 1
+      },
+      "questions": null,
+      "score": 98,
+      "passed": true
+    },
+    {
+      "levelId": "level-1-concept",
+      "input": {
+        "sentences": [
+          [
+            "在医疗、护理操作过程中",
+            "防止一切微生物侵入人体和",
+            "防止无菌物品、无菌区域被污染的技术"
+          ],
+          [
+            "经灭菌处理",
+            "且未被污染的区域"
+          ],
+          [
+            "未经灭菌处理",
+            "或虽经灭菌处理",
+            "但又被污染的区域"
+          ],
+          [
+            "通过灭菌处理后",
+            "保持无菌状态的物品"
+          ],
+          [
+            "未经灭菌处理",
+            "或虽经灭菌处理后",
+            "又被污染的物品"
+          ]
+        ],
+        "toolsUsed": [
+          "preparation_timing",
+          "environment_sweeping",
+          "scheduled_disinfection",
+          "table_preparation",
+          "trim_nails",
+          "hand_hygiene",
+          "wear_uniform",
+          "wear_cap",
+          "wear_mask",
+          "supplies_layout"
+        ],
+        "openedItemAnswers": {
+          "opened_swabs": "24h",
+          "opened_solution": "24h",
+          "opened_disinfectants": "7d",
+          "dry_forceps": "4h",
+          "prepared_tray": "4h",
+          "opened_pack": "24h",
+          "used_container": "max24h",
+          "opened_gauze": "4h"
+        },
+        "itemClassification": {
+          "opened_gauze": "sterile_storage",
+          "gloves": "non_sterile_storage",
+          "dry_forceps": "sterile_storage",
+          "bandage": "non_sterile_storage",
+          "opened_pack": "sterile_storage",
+          "medical_mask": "non_sterile_storage",
+          "sterile_syringe": "sterile_storage",
+          "opened_disinfectants": "non_sterile_storage",
+          "opened_swabs": "sterile_storage",
+          "cleaning_broom": "non_sterile_storage",
+          "sterile_catheter_kit": "sterile_storage",
+          "opened_solution": "sterile_storage",
+          "prepared_tray": "sterile_storage",
+          "used_container": "sterile_storage",
+          "crepe_instrument_pack": "sterile_storage",
+          "medical_waste_bag": "non_sterile_storage"
+        },
+        "storageKnowledgeAnswers": [
+          14,
+          7,
+          30,
+          180,
+          180,
+          180,
+          180
+        ],
+        "storageEnvironment": {
+          "temperature": 22,
+          "humidity": 50,
+          "airChanges": 6
+        },
+        "expirationValidation": true,
+        "mistakes": 4,
+        "wrongTaps": 4,
+        "wrongZonePlacements": 4
+      },
+      "questions": null,
+      "score": 92,
+      "passed": true
+    },
+    {
+      "levelId": "level-1-concept",
+      "input": {
+        "sentences": [
+          [
+            "在医疗、护理操作过程中",
+            "防止一切微生物侵入人体和",
+            "防止无菌物品、无菌区域被污染的技术"
+          ],
+          [
+            "经灭菌处理",
+            "且未被污染的区域"
+          ],
+          [
+            "未经灭菌处理",
+            "或虽经灭菌处理",
+            "但又被污染的区域"
+          ],
+          [
+            "通过灭菌处理后",
+            "保持无菌状态的物品"
+          ],
+          [
+            "未经灭菌处理",
+            "或虽经灭菌处理后",
+            "又被污染的物品"
+          ]
+        ],
+        "toolsUsed": [
+          "preparation_timing",
+          "environment_sweeping",
+          "scheduled_disinfection",
+          "table_preparation",
+          "trim_nails",
+          "hand_hygiene",
+          "wear_uniform",
+          "wear_cap",
+          "wear_mask",
+          "supplies_layout"
+        ],
+        "openedItemAnswers": {
+          "opened_swabs": "24h",
+          "opened_solution": "24h",
+          "opened_disinfectants": "7d",
+          "dry_forceps": "4h",
+          "prepared_tray": "4h",
+          "opened_pack": "24h",
+          "used_container": "max24h",
+          "opened_gauze": "4h"
+        },
+        "itemClassification": {
+          "opened_gauze": "sterile_storage",
+          "gloves": "non_sterile_storage",
+          "dry_forceps": "sterile_storage",
+          "bandage": "non_sterile_storage",
+          "opened_pack": "sterile_storage",
+          "medical_mask": "non_sterile_storage",
+          "sterile_syringe": "sterile_storage",
+          "opened_disinfectants": "non_sterile_storage",
+          "opened_swabs": "sterile_storage",
+          "cleaning_broom": "non_sterile_storage",
+          "sterile_catheter_kit": "sterile_storage",
+          "opened_solution": "sterile_storage",
+          "prepared_tray": "sterile_storage",
+          "used_container": "sterile_storage",
+          "crepe_instrument_pack": "sterile_storage",
+          "medical_waste_bag": "non_sterile_storage"
+        },
+        "storageKnowledgeAnswers": [
+          14,
+          7,
+          30,
+          180,
+          180,
+          180,
+          180
+        ],
+        "storageEnvironment": {
+          "temperature": 22,
+          "humidity": 50,
+          "airChanges": 6
+        },
+        "expirationValidation": true,
+        "mistakes": 30,
+        "wrongTaps": 30,
+        "wrongZonePlacements": 30
+      },
+      "questions": null,
+      "score": 60,
+      "passed": true
+    },
+    {
+      "levelId": "level-1-concept",
+      "input": {},
+      "questions": null,
+      "score": 0,
+      "passed": false
+    },
+    {
+      "levelId": "level-2-glove-forceps-hunt",
+      "input": {
+        "forceps_types": {
+          "selections": [
+            "oval_forceps",
+            "three_prong_forceps",
+            "long_tweezers",
+            "short_tweezers"
+          ]
+        },
+        "instrument_storage": {
+          "selections": [
+            "multiple_forceps",
+            "inverted_lid",
+            "small_unchanged_indicator",
+            "contaminated_swabs"
+          ]
+        },
+        "forceps_operation": {
+          "selections": [
+            "insufficient_immersion",
+            "incorrect_grip",
+            "tip_touches_rim",
+            "missing_indicator"
+          ]
+        },
+        "glove_procedure": {
+          "selections": [
+            "below_waist",
+            "gloved_touches_bare_hand",
+            "donning_touches_inside",
+            "removing_touches_inside"
+          ]
+        },
+        "mistakes": 0,
+        "wrongTaps": 0,
+        "wrongZonePlacements": 0
+      },
+      "questions": null,
+      "score": 100,
+      "passed": true
+    },
+    {
+      "levelId": "level-2-glove-forceps-hunt",
+      "input": {
+        "forceps_types": {
+          "selections": [
+            "oval_forceps",
+            "three_prong_forceps",
+            "long_tweezers",
+            "short_tweezers"
+          ]
+        },
+        "instrument_storage": {
+          "selections": [
+            "multiple_forceps",
+            "inverted_lid",
+            "small_unchanged_indicator",
+            "contaminated_swabs"
+          ]
+        },
+        "forceps_operation": {
+          "selections": [
+            "insufficient_immersion",
+            "incorrect_grip",
+            "tip_touches_rim",
+            "missing_indicator"
+          ]
+        },
+        "glove_procedure": {
+          "selections": [
+            "below_waist",
+            "gloved_touches_bare_hand",
+            "donning_touches_inside",
+            "removing_touches_inside"
+          ]
+        },
+        "mistakes": 1,
+        "wrongTaps": 1,
+        "wrongZonePlacements": 1
+      },
+      "questions": null,
+      "score": 95,
+      "passed": true
+    },
+    {
+      "levelId": "level-2-glove-forceps-hunt",
+      "input": {
+        "forceps_types": {
+          "selections": [
+            "oval_forceps",
+            "three_prong_forceps",
+            "long_tweezers",
+            "short_tweezers"
+          ]
+        },
+        "instrument_storage": {
+          "selections": [
+            "multiple_forceps",
+            "inverted_lid",
+            "small_unchanged_indicator",
+            "contaminated_swabs"
+          ]
+        },
+        "forceps_operation": {
+          "selections": [
+            "insufficient_immersion",
+            "incorrect_grip",
+            "tip_touches_rim",
+            "missing_indicator"
+          ]
+        },
+        "glove_procedure": {
+          "selections": [
+            "below_waist",
+            "gloved_touches_bare_hand",
+            "donning_touches_inside",
+            "removing_touches_inside"
+          ]
+        },
+        "mistakes": 4,
+        "wrongTaps": 4,
+        "wrongZonePlacements": 4
+      },
+      "questions": null,
+      "score": 80,
+      "passed": true
+    },
+    {
+      "levelId": "level-2-glove-forceps-hunt",
+      "input": {
+        "forceps_types": {
+          "selections": [
+            "oval_forceps",
+            "three_prong_forceps",
+            "long_tweezers",
+            "short_tweezers"
+          ]
+        },
+        "instrument_storage": {
+          "selections": [
+            "multiple_forceps",
+            "inverted_lid",
+            "small_unchanged_indicator",
+            "contaminated_swabs"
+          ]
+        },
+        "forceps_operation": {
+          "selections": [
+            "insufficient_immersion",
+            "incorrect_grip",
+            "tip_touches_rim",
+            "missing_indicator"
+          ]
+        },
+        "glove_procedure": {
+          "selections": [
+            "below_waist",
+            "gloved_touches_bare_hand",
+            "donning_touches_inside",
+            "removing_touches_inside"
+          ]
+        },
+        "mistakes": 30,
+        "wrongTaps": 30,
+        "wrongZonePlacements": 30
+      },
+      "questions": null,
+      "score": 0,
+      "passed": false
+    },
+    {
+      "levelId": "level-2-glove-forceps-hunt",
+      "input": {},
+      "questions": null,
+      "score": 0,
+      "passed": false
+    },
+    {
+      "levelId": "level-3-container-maze",
+      "input": {
+        "mistakes": 0,
+        "wrongTaps": 0,
+        "wrongZonePlacements": 0,
+        "answers": {
+          "q1": "B",
+          "q2": "B",
+          "q3": "质厚、致密、未脱脂的双层棉布或医用无纺",
+          "q4": "B",
+          "q5": "容器名称、灭菌日期、失效期、灭菌标识",
+          "q6": "B",
+          "q7": "B"
+        },
+        "fragmentsCollected": 7,
+        "reachedExit": true,
+        "collisions": 0
+      },
+      "questions": [
+        {
+          "id": "q1",
+          "type": "single_choice",
+          "sourceId": "mc4",
+          "options": [
+            "倾斜夹取，避免触碰容器",
+            "垂直夹取，避免触及容器边缘",
+            "快速夹取，无需担心触碰",
+            "使用手直接取物"
+          ],
+          "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q2",
+          "type": "single_choice",
+          "sourceId": "mc2",
+          "options": [
+            "将盖子直接翻转放在桌上",
+            "将盖子平移离开容器，内面向上放置",
+            "将盖子倒置在容器旁",
+            "用手握住盖子边缘"
+          ],
+          "text": "打开无菌容器盖时，正确的做法是？",
+          "acceptedAnswers": [
+            "B",
+            "C"
+          ],
+          "learningContent": "盖内面应朝上放在稳妥处，手不可触及内面及边缘。原题 B 与 C 表述重合，均予认可。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q3",
+          "type": "fill_blank",
+          "sourceId": "mb6",
+          "text": "无菌包的包布通常选用____材料制成。",
+          "acceptedAnswers": [
+            "质厚、致密、未脱脂的双层棉布或医用无纺",
+            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
+          ],
+          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q4",
+          "type": "single_choice",
+          "sourceId": "mc5",
+          "options": [
+            "包布的内面",
+            "包布四角的外面",
+            "包内无菌物品",
+            "包布的任意部分"
+          ],
+          "text": "打开无菌包时，手可以接触包布的哪个部分？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "打开无菌包时，手只能接触包布四角的外面，不可触及内面或包内物品。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q5",
+          "type": "fill_blank",
+          "sourceId": "mb7",
+          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
+          "acceptedAnswers": [
+            "容器名称、灭菌日期、失效期、灭菌标识",
+            "容器名称、灭菌日期、有效期、灭菌标识"
+          ],
+          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q6",
+          "type": "single_choice",
+          "sourceId": "mc3",
+          "options": [
+            "暂时不盖，以便下次取物",
+            "立即将盖盖严",
+            "等所有物品用完后再盖",
+            "只盖一半"
+          ],
+          "text": "取物后，应该如何处理无菌容器盖？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "取物后立即盖严无菌容器。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q7",
+          "type": "single_choice",
+          "sourceId": "mc1",
+          "options": [
+            "握住容器边缘",
+            "托住容器底部",
+            "抓住容器盖子",
+            "用手覆盖容器口"
+          ],
+          "text": "手持无菌容器时，正确的持法是？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "手持无菌容器应托住底部，避免触及容器边缘及内面。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        }
+      ],
+      "score": 100,
+      "passed": true
+    },
+    {
+      "levelId": "level-3-container-maze",
+      "input": {
+        "mistakes": 1,
+        "wrongTaps": 1,
+        "wrongZonePlacements": 1,
+        "answers": {
+          "q1": "容器名称、灭菌日期、失效期、灭菌标识",
+          "q2": "B",
+          "q3": "质厚、致密、未脱脂的双层棉布或医用无纺",
+          "q4": "B",
+          "q5": "B",
+          "q6": "B",
+          "q7": "B"
+        },
+        "fragmentsCollected": 7,
+        "reachedExit": true,
+        "collisions": 1
+      },
+      "questions": [
+        {
+          "id": "q1",
+          "type": "fill_blank",
+          "sourceId": "mb7",
+          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
+          "acceptedAnswers": [
+            "容器名称、灭菌日期、失效期、灭菌标识",
+            "容器名称、灭菌日期、有效期、灭菌标识"
+          ],
+          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q2",
+          "type": "single_choice",
+          "sourceId": "mc1",
+          "options": [
+            "握住容器边缘",
+            "托住容器底部",
+            "抓住容器盖子",
+            "用手覆盖容器口"
+          ],
+          "text": "手持无菌容器时，正确的持法是？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "手持无菌容器应托住底部，避免触及容器边缘及内面。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q3",
+          "type": "fill_blank",
+          "sourceId": "mb6",
+          "text": "无菌包的包布通常选用____材料制成。",
+          "acceptedAnswers": [
+            "质厚、致密、未脱脂的双层棉布或医用无纺",
+            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
+          ],
+          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q4",
+          "type": "single_choice",
+          "sourceId": "mc3",
+          "options": [
+            "暂时不盖，以便下次取物",
+            "立即将盖盖严",
+            "等所有物品用完后再盖",
+            "只盖一半"
+          ],
+          "text": "取物后，应该如何处理无菌容器盖？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "取物后立即盖严无菌容器。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q5",
+          "type": "single_choice",
+          "sourceId": "mc4",
+          "options": [
+            "倾斜夹取，避免触碰容器",
+            "垂直夹取，避免触及容器边缘",
+            "快速夹取，无需担心触碰",
+            "使用手直接取物"
+          ],
+          "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q6",
+          "type": "single_choice",
+          "sourceId": "mc2",
+          "options": [
+            "将盖子直接翻转放在桌上",
+            "将盖子平移离开容器，内面向上放置",
+            "将盖子倒置在容器旁",
+            "用手握住盖子边缘"
+          ],
+          "text": "打开无菌容器盖时，正确的做法是？",
+          "acceptedAnswers": [
+            "B",
+            "C"
+          ],
+          "learningContent": "盖内面应朝上放在稳妥处，手不可触及内面及边缘。原题 B 与 C 表述重合，均予认可。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q7",
+          "type": "single_choice",
+          "sourceId": "mc5",
+          "options": [
+            "包布的内面",
+            "包布四角的外面",
+            "包内无菌物品",
+            "包布的任意部分"
+          ],
+          "text": "打开无菌包时，手可以接触包布的哪个部分？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "打开无菌包时，手只能接触包布四角的外面，不可触及内面或包内物品。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        }
+      ],
+      "score": 85,
+      "passed": true
+    },
+    {
+      "levelId": "level-3-container-maze",
+      "input": {
+        "mistakes": 4,
+        "wrongTaps": 4,
+        "wrongZonePlacements": 4,
+        "answers": {
+          "q1": "B",
+          "q2": "B",
+          "q3": "B",
+          "q4": "B",
+          "q5": "质厚、致密、未脱脂的双层棉布或医用无纺",
+          "q6": "容器名称、灭菌日期、失效期、灭菌标识",
+          "q7": "B"
+        },
+        "fragmentsCollected": 7,
+        "reachedExit": true,
+        "collisions": 4
+      },
+      "questions": [
+        {
+          "id": "q1",
+          "type": "single_choice",
+          "sourceId": "mc4",
+          "options": [
+            "倾斜夹取，避免触碰容器",
+            "垂直夹取，避免触及容器边缘",
+            "快速夹取，无需担心触碰",
+            "使用手直接取物"
+          ],
+          "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q2",
+          "type": "single_choice",
+          "sourceId": "mc2",
+          "options": [
+            "将盖子直接翻转放在桌上",
+            "将盖子平移离开容器，内面向上放置",
+            "将盖子倒置在容器旁",
+            "用手握住盖子边缘"
+          ],
+          "text": "打开无菌容器盖时，正确的做法是？",
+          "acceptedAnswers": [
+            "B",
+            "C"
+          ],
+          "learningContent": "盖内面应朝上放在稳妥处，手不可触及内面及边缘。原题 B 与 C 表述重合，均予认可。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q3",
+          "type": "single_choice",
+          "sourceId": "mc1",
+          "options": [
+            "握住容器边缘",
+            "托住容器底部",
+            "抓住容器盖子",
+            "用手覆盖容器口"
+          ],
+          "text": "手持无菌容器时，正确的持法是？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "手持无菌容器应托住底部，避免触及容器边缘及内面。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q4",
+          "type": "single_choice",
+          "sourceId": "mc3",
+          "options": [
+            "暂时不盖，以便下次取物",
+            "立即将盖盖严",
+            "等所有物品用完后再盖",
+            "只盖一半"
+          ],
+          "text": "取物后，应该如何处理无菌容器盖？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "取物后立即盖严无菌容器。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q5",
+          "type": "fill_blank",
+          "sourceId": "mb6",
+          "text": "无菌包的包布通常选用____材料制成。",
+          "acceptedAnswers": [
+            "质厚、致密、未脱脂的双层棉布或医用无纺",
+            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
+          ],
+          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q6",
+          "type": "fill_blank",
+          "sourceId": "mb7",
+          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
+          "acceptedAnswers": [
+            "容器名称、灭菌日期、失效期、灭菌标识",
+            "容器名称、灭菌日期、有效期、灭菌标识"
+          ],
+          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q7",
+          "type": "single_choice",
+          "sourceId": "mc5",
+          "options": [
+            "包布的内面",
+            "包布四角的外面",
+            "包内无菌物品",
+            "包布的任意部分"
+          ],
+          "text": "打开无菌包时，手可以接触包布的哪个部分？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "打开无菌包时，手只能接触包布四角的外面，不可触及内面或包内物品。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        }
+      ],
+      "score": 40,
+      "passed": false
+    },
+    {
+      "levelId": "level-3-container-maze",
+      "input": {
+        "mistakes": 30,
+        "wrongTaps": 30,
+        "wrongZonePlacements": 30,
+        "answers": {
+          "q1": "B",
+          "q2": "B",
+          "q3": "B",
+          "q4": "B",
+          "q5": "B",
+          "q6": "质厚、致密、未脱脂的双层棉布或医用无纺",
+          "q7": "容器名称、灭菌日期、失效期、灭菌标识"
+        },
+        "fragmentsCollected": 7,
+        "reachedExit": true,
+        "collisions": 30
+      },
+      "questions": [
+        {
+          "id": "q1",
+          "type": "single_choice",
+          "sourceId": "mc5",
+          "options": [
+            "包布的内面",
+            "包布四角的外面",
+            "包内无菌物品",
+            "包布的任意部分"
+          ],
+          "text": "打开无菌包时，手可以接触包布的哪个部分？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "打开无菌包时，手只能接触包布四角的外面，不可触及内面或包内物品。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q2",
+          "type": "single_choice",
+          "sourceId": "mc3",
+          "options": [
+            "暂时不盖，以便下次取物",
+            "立即将盖盖严",
+            "等所有物品用完后再盖",
+            "只盖一半"
+          ],
+          "text": "取物后，应该如何处理无菌容器盖？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "取物后立即盖严无菌容器。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q3",
+          "type": "single_choice",
+          "sourceId": "mc2",
+          "options": [
+            "将盖子直接翻转放在桌上",
+            "将盖子平移离开容器，内面向上放置",
+            "将盖子倒置在容器旁",
+            "用手握住盖子边缘"
+          ],
+          "text": "打开无菌容器盖时，正确的做法是？",
+          "acceptedAnswers": [
+            "B",
+            "C"
+          ],
+          "learningContent": "盖内面应朝上放在稳妥处，手不可触及内面及边缘。原题 B 与 C 表述重合，均予认可。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q4",
+          "type": "single_choice",
+          "sourceId": "mc1",
+          "options": [
+            "握住容器边缘",
+            "托住容器底部",
+            "抓住容器盖子",
+            "用手覆盖容器口"
+          ],
+          "text": "手持无菌容器时，正确的持法是？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "手持无菌容器应托住底部，避免触及容器边缘及内面。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q5",
+          "type": "single_choice",
+          "sourceId": "mc4",
+          "options": [
+            "倾斜夹取，避免触碰容器",
+            "垂直夹取，避免触及容器边缘",
+            "快速夹取，无需担心触碰",
+            "使用手直接取物"
+          ],
+          "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q6",
+          "type": "fill_blank",
+          "sourceId": "mb6",
+          "text": "无菌包的包布通常选用____材料制成。",
+          "acceptedAnswers": [
+            "质厚、致密、未脱脂的双层棉布或医用无纺",
+            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
+          ],
+          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q7",
+          "type": "fill_blank",
+          "sourceId": "mb7",
+          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
+          "acceptedAnswers": [
+            "容器名称、灭菌日期、失效期、灭菌标识",
+            "容器名称、灭菌日期、有效期、灭菌标识"
+          ],
+          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        }
+      ],
+      "score": 0,
+      "passed": false
+    },
+    {
+      "levelId": "level-3-container-maze",
+      "input": {},
+      "questions": [
+        {
+          "id": "q1",
+          "type": "single_choice",
+          "sourceId": "mc2",
+          "options": [
+            "将盖子直接翻转放在桌上",
+            "将盖子平移离开容器，内面向上放置",
+            "将盖子倒置在容器旁",
+            "用手握住盖子边缘"
+          ],
+          "text": "打开无菌容器盖时，正确的做法是？",
+          "acceptedAnswers": [
+            "B",
+            "C"
+          ],
+          "learningContent": "盖内面应朝上放在稳妥处，手不可触及内面及边缘。原题 B 与 C 表述重合，均予认可。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q2",
+          "type": "fill_blank",
+          "sourceId": "mb6",
+          "text": "无菌包的包布通常选用____材料制成。",
+          "acceptedAnswers": [
+            "质厚、致密、未脱脂的双层棉布或医用无纺",
+            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
+          ],
+          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q3",
+          "type": "single_choice",
+          "sourceId": "mc3",
+          "options": [
+            "暂时不盖，以便下次取物",
+            "立即将盖盖严",
+            "等所有物品用完后再盖",
+            "只盖一半"
+          ],
+          "text": "取物后，应该如何处理无菌容器盖？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "取物后立即盖严无菌容器。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q4",
+          "type": "single_choice",
+          "sourceId": "mc4",
+          "options": [
+            "倾斜夹取，避免触碰容器",
+            "垂直夹取，避免触及容器边缘",
+            "快速夹取，无需担心触碰",
+            "使用手直接取物"
+          ],
+          "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q5",
+          "type": "fill_blank",
+          "sourceId": "mb7",
+          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
+          "acceptedAnswers": [
+            "容器名称、灭菌日期、失效期、灭菌标识",
+            "容器名称、灭菌日期、有效期、灭菌标识"
+          ],
+          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q6",
+          "type": "single_choice",
+          "sourceId": "mc5",
+          "options": [
+            "包布的内面",
+            "包布四角的外面",
+            "包内无菌物品",
+            "包布的任意部分"
+          ],
+          "text": "打开无菌包时，手可以接触包布的哪个部分？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "打开无菌包时，手只能接触包布四角的外面，不可触及内面或包内物品。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q7",
+          "type": "single_choice",
+          "sourceId": "mc1",
+          "options": [
+            "握住容器边缘",
+            "托住容器底部",
+            "抓住容器盖子",
+            "用手覆盖容器口"
+          ],
+          "text": "手持无菌容器时，正确的持法是？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "手持无菌容器应托住底部，避免触及容器边缘及内面。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        }
+      ],
+      "score": 0,
+      "passed": false
+    },
+    {
+      "levelId": "level-4-solution-stacking",
+      "input": {
+        "perfectOperations": {
+          "verification_zone": 2,
+          "liquid_pouring_zone": 2
+        },
+        "contaminationBlocks": 0,
+        "mergesCompleted": 10,
+        "toolsUsed": 5,
+        "ultimateSterileCodex": true,
+        "mistakes": 0,
+        "wrongTaps": 0,
+        "wrongZonePlacements": 0
+      },
+      "questions": null,
+      "score": 100,
+      "passed": true
+    },
+    {
+      "levelId": "level-4-solution-stacking",
+      "input": {
+        "perfectOperations": {
+          "verification_zone": 2,
+          "liquid_pouring_zone": 2
+        },
+        "contaminationBlocks": 0,
+        "mergesCompleted": 10,
+        "toolsUsed": 5,
+        "ultimateSterileCodex": true,
+        "mistakes": 1,
+        "wrongTaps": 1,
+        "wrongZonePlacements": 1
+      },
+      "questions": null,
+      "score": 98,
+      "passed": true
+    },
+    {
+      "levelId": "level-4-solution-stacking",
+      "input": {
+        "perfectOperations": {
+          "verification_zone": 2,
+          "liquid_pouring_zone": 2
+        },
+        "contaminationBlocks": 0,
+        "mergesCompleted": 10,
+        "toolsUsed": 5,
+        "ultimateSterileCodex": true,
+        "mistakes": 4,
+        "wrongTaps": 4,
+        "wrongZonePlacements": 4
+      },
+      "questions": null,
+      "score": 92,
+      "passed": true
+    },
+    {
+      "levelId": "level-4-solution-stacking",
+      "input": {
+        "perfectOperations": {
+          "verification_zone": 2,
+          "liquid_pouring_zone": 2
+        },
+        "contaminationBlocks": 0,
+        "mergesCompleted": 10,
+        "toolsUsed": 5,
+        "ultimateSterileCodex": true,
+        "mistakes": 30,
+        "wrongTaps": 30,
+        "wrongZonePlacements": 30
+      },
+      "questions": null,
+      "score": 60,
+      "passed": true
+    },
+    {
+      "levelId": "level-4-solution-stacking",
+      "input": {},
+      "questions": null,
+      "score": 30,
+      "passed": false
+    },
+    {
+      "levelId": "level-5-space-guardian",
+      "input": {
+        "phase1": {
+          "bacteriaEliminated": 6,
+          "completedMethods": [
+            "single_drape",
+            "double_drape"
+          ],
+          "correctProcedureSteps": 18
+        },
+        "phase2": {
+          "obstaclesRemoved": 3,
+          "correctMethods": 3,
+          "sterileItemsOpened": 3
+        },
+        "sterility": 100,
+        "sterileZoneEstablished": true,
+        "mistakes": 0,
+        "wrongTaps": 0,
+        "wrongZonePlacements": 0
+      },
+      "questions": null,
+      "score": 100,
+      "passed": true
+    },
+    {
+      "levelId": "level-5-space-guardian",
+      "input": {
+        "phase1": {
+          "bacteriaEliminated": 6,
+          "completedMethods": [
+            "single_drape",
+            "double_drape"
+          ],
+          "correctProcedureSteps": 18
+        },
+        "phase2": {
+          "obstaclesRemoved": 3,
+          "correctMethods": 3,
+          "sterileItemsOpened": 3
+        },
+        "sterility": 100,
+        "sterileZoneEstablished": true,
+        "mistakes": 1,
+        "wrongTaps": 1,
+        "wrongZonePlacements": 1
+      },
+      "questions": null,
+      "score": 98,
+      "passed": true
+    },
+    {
+      "levelId": "level-5-space-guardian",
+      "input": {
+        "phase1": {
+          "bacteriaEliminated": 6,
+          "completedMethods": [
+            "single_drape",
+            "double_drape"
+          ],
+          "correctProcedureSteps": 18
+        },
+        "phase2": {
+          "obstaclesRemoved": 3,
+          "correctMethods": 3,
+          "sterileItemsOpened": 3
+        },
+        "sterility": 100,
+        "sterileZoneEstablished": true,
+        "mistakes": 4,
+        "wrongTaps": 4,
+        "wrongZonePlacements": 4
+      },
+      "questions": null,
+      "score": 92,
+      "passed": true
+    },
+    {
+      "levelId": "level-5-space-guardian",
+      "input": {
+        "phase1": {
+          "bacteriaEliminated": 6,
+          "completedMethods": [
+            "single_drape",
+            "double_drape"
+          ],
+          "correctProcedureSteps": 18
+        },
+        "phase2": {
+          "obstaclesRemoved": 3,
+          "correctMethods": 3,
+          "sterileItemsOpened": 3
+        },
+        "sterility": 100,
+        "sterileZoneEstablished": true,
+        "mistakes": 30,
+        "wrongTaps": 30,
+        "wrongZonePlacements": 30
+      },
+      "questions": null,
+      "score": 60,
+      "passed": true
+    },
+    {
+      "levelId": "level-5-space-guardian",
+      "input": {},
+      "questions": null,
+      "score": 0,
+      "passed": false
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+name: Verify online server
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: aseptic
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: aseptic_training
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U aseptic -d aseptic_training"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://aseptic:ci-only-password@localhost:5432/aseptic_training?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npm test
+      - run: npm run build
+      - run: node tools/test_online_integration.cjs
+      - run: docker build -t sterile-training-online:ci .
