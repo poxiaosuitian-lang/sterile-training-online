@@ -29,10 +29,8 @@ def main():
     parser.add_argument('--directory', type=Path,
                         default=Path(__file__).resolve().parent.parent / 'deploy/releases')
     args = parser.parse_args()
-    with fetch(f'https://api.github.com/repos/{REPOSITORY}/releases/latest') as response:
-        release = json.load(response)
-    assets = {item['name']: item['browser_download_url'] for item in release['assets']}
-    with fetch(assets['latest.json']) as response:
+    # Public release downloads do not consume the anonymous GitHub API quota.
+    with fetch(f'https://github.com/{REPOSITORY}/releases/latest/download/latest.json') as response:
         manifest = json.load(response)
     filename = manifest.get('fileName', '')
     version = manifest.get('versionCode')
@@ -40,9 +38,12 @@ def main():
             not re.fullmatch(r'sterile-online-[0-9]+\.apk', filename) or
             filename != f'sterile-online-{version}.apk' or
             not isinstance(manifest.get('versionName'), str) or
+            not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', manifest['versionName']) or
             not isinstance(manifest.get('notes'), str)):
         raise ValueError('Invalid release manifest')
-    with fetch(assets['SHA256SUMS']) as response:
+    # Pin every remaining download to this version even if a new release lands.
+    asset_base = f"https://github.com/{REPOSITORY}/releases/download/v{manifest['versionName']}/"
+    with fetch(asset_base + 'SHA256SUMS') as response:
         checksums = dict((line.split()[1], line.split()[0])
                          for line in response.read().decode('utf-8').splitlines() if line.strip())
     expected = checksums[filename]
@@ -59,7 +60,7 @@ def main():
     if not apk.exists() or digest(apk) != expected.lower():
         handle, temporary = tempfile.mkstemp(prefix=filename + '.', suffix='.part', dir=directory)
         try:
-            with os.fdopen(handle, 'wb') as output, fetch(assets[filename]) as response:
+            with os.fdopen(handle, 'wb') as output, fetch(asset_base + filename) as response:
                 for chunk in iter(lambda: response.read(1024 * 1024), b''):
                     output.write(chunk)
             if digest(Path(temporary)) != expected.lower():

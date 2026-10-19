@@ -17,21 +17,19 @@ class UpdateApkTest(unittest.TestCase):
         self.apk = b'test release bytes'
         self.manifest = {'versionCode': 87, 'versionName': '1.0.86',
                          'fileName': 'sterile-online-87.apk', 'notes': 'test'}
+        base = f'https://github.com/{update_apk.REPOSITORY}/releases/'
+        self.apk_url = base + 'download/v1.0.86/sterile-online-87.apk'
         self.urls = {
-            'manifest': json.dumps(self.manifest).encode(),
-            'apk': self.apk,
-            'hash': (hashlib.sha256(self.apk).hexdigest() + '  sterile-online-87.apk\n').encode(),
-            f'https://api.github.com/repos/{update_apk.REPOSITORY}/releases/latest':
-                json.dumps({'assets': [
-                    {'name': 'latest.json', 'browser_download_url': 'manifest'},
-                    {'name': 'SHA256SUMS', 'browser_download_url': 'hash'},
-                    {'name': 'sterile-online-87.apk', 'browser_download_url': 'apk'},
-                ]}).encode(),
+            base + 'latest/download/latest.json': json.dumps(self.manifest).encode(),
+            self.apk_url: self.apk,
+            base + 'download/v1.0.86/SHA256SUMS':
+                (hashlib.sha256(self.apk).hexdigest() + '  sterile-online-87.apk\n').encode(),
         }
 
     def run_update(self):
         def fetch(url):
-            if url == 'apk':
+            self.assertNotIn('api.github.com', url)
+            if url == self.apk_url:
                 # The old announcement must remain available while downloading.
                 self.assertEqual(json.loads((self.directory / 'latest.json').read_text())['versionCode'], 86)
             return io.BytesIO(self.urls[url])
@@ -45,11 +43,11 @@ class UpdateApkTest(unittest.TestCase):
         self.run_update()
         self.assertEqual((self.directory / self.manifest['fileName']).read_bytes(), self.apk)
         self.assertEqual(json.loads((self.directory / 'latest.json').read_text()), self.manifest)
-        self.assertNotIn('apk', self.run_update())
+        self.assertNotIn(self.apk_url, self.run_update())
 
     def test_bad_checksum_keeps_previous_release(self):
         (self.directory / 'latest.json').write_text('{"versionCode":86}')
-        self.urls['apk'] = b'corrupt download'
+        self.urls[self.apk_url] = b'corrupt download'
         with self.assertRaisesRegex(ValueError, 'checksum mismatch'):
             self.run_update()
         self.assertEqual((self.directory / 'latest.json').read_text(), '{"versionCode":86}')
