@@ -136,6 +136,17 @@ suite('Online accounts, persistence and administration over HTTP', () => {
     }});
     await prisma.levelProgress.create({data:{playerId:player.id,levelId:level.id,unlocked:true,attempts:1}});
     await prisma.scoreEvent.create({data:{playerId:player.id,levelId:level.id,score:0,stars:0}});
+    const hunt = levels.find('level-2-glove-forceps-hunt');
+    const huntChallenge = levels.createChallenge(hunt);
+    const huntSubmission = Object.fromEntries((hunt.publicConfig.stages as Array<{id:string}>)
+      .map(stage=>[stage.id,{selections:hunt.answerKey[`${stage.id}_errors`]}]));
+    const huntSession = await prisma.gameSession.create({data:{
+      playerId:player.id,levelId:hunt.id,levelVersion:6,challenge:huntChallenge,
+      submission:{...huntSubmission,wrongTaps:20},
+      receipt:{score:0,stars:0,passed:false},score:0,stars:0,status:'FAILED',
+      completedAt:new Date(),expiresAt:new Date('9999-12-31'),
+    }});
+    await prisma.levelProgress.create({data:{playerId:player.id,levelId:hunt.id,unlocked:true,attempts:1}});
     expect(await repairTrainingScores(prisma,levels,leaderboard))
       .toMatchObject({eligible:1,updated:0});
     expect((await prisma.gameSession.findUniqueOrThrow({where:{id:session.id}})).score).toBe(0);
@@ -148,6 +159,10 @@ suite('Online accounts, persistence and administration over HTTP', () => {
     expect(await prisma.levelProgress.findUniqueOrThrow({where:{playerId_levelId:{playerId:player.id,levelId:levels.next(level.id)!.id}}}))
       .toMatchObject({unlocked:true});
     expect(await prisma.scoreEvent.count({where:{playerId:player.id}})).toBe(1);
+    expect(await prisma.gameSession.findUniqueOrThrow({where:{id:huntSession.id}}))
+      .toMatchObject({score:0,stars:0,status:'FAILED'});
+    expect(await prisma.levelProgress.findUniqueOrThrow({where:{playerId_levelId:{playerId:player.id,levelId:hunt.id}}}))
+      .toMatchObject({bestScore:0,completed:false,attempts:1});
     expect(await repairTrainingScores(prisma,levels,leaderboard,true)).toMatchObject({eligible:0,updated:0});
   });
 });

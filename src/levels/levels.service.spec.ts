@@ -168,11 +168,13 @@ describe('LevelsService', () => {
       .toBe(false);
   });
 
-  it('keeps completed hunt training passable after many wrong taps but rejects missing targets', () => {
+  it('deducts five points per hunt mistake without a passing score floor', () => {
     const level = service.find('level-2-glove-forceps-hunt');
     const stages = level.publicConfig.stages as Array<{id:string}>;
     const result = Object.fromEntries(stages.map(s => [s.id, {selections:level.answerKey[`${s.id}_errors`]}]));
-    expect(service.validate(level, {...result, wrongTaps:100})).toMatchObject({score:60, passed:true});
+    for (const [wrongTaps, score, passed] of [[0,100,true],[8,60,true],[9,55,false],[20,0,false]] as const) {
+      expect(service.validate(level, {...result, wrongTaps})).toMatchObject({score, passed});
+    }
     expect(service.validate(level, {...result, [stages[0].id]:{selections:[]}}).passed).toBe(false);
   });
 

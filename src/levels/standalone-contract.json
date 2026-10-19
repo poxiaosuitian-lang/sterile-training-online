@@ -24,7 +24,7 @@
     {
       "id": "level-2-glove-forceps-hunt",
       "order": 2,
-      "version": 7,
+      "version": 8,
       "title": "第二关：手套钳具找茬赛",
       "subtitle": "根据无菌操作注意事项找出错误",
       "kind": "error_hunt",
@@ -981,8 +981,8 @@
         "wrongZonePlacements": 30
       },
       "questions": null,
-      "score": 60,
-      "passed": true
+      "score": 0,
+      "passed": false
     },
     {
       "levelId": "level-2-glove-forceps-hunt",
@@ -998,13 +998,13 @@
         "wrongTaps": 0,
         "wrongZonePlacements": 0,
         "answers": {
-          "q1": "容器名称、灭菌日期、失效期、灭菌标识",
-          "q2": "B",
+          "q1": "B",
+          "q2": "容器名称、灭菌日期、失效期、灭菌标识",
           "q3": "B",
           "q4": "B",
-          "q5": "质厚、致密、未脱脂的双层棉布或医用无纺",
+          "q5": "B",
           "q6": "B",
-          "q7": "B"
+          "q7": "质厚、致密、未脱脂的双层棉布或医用无纺"
         },
         "fragmentsCollected": 7,
         "reachedExit": true,
@@ -1013,52 +1013,6 @@
       "questions": [
         {
           "id": "q1",
-          "type": "fill_blank",
-          "sourceId": "mb7",
-          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
-          "acceptedAnswers": [
-            "容器名称、灭菌日期、失效期、灭菌标识",
-            "容器名称、灭菌日期、有效期、灭菌标识"
-          ],
-          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
-          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
-        },
-        {
-          "id": "q2",
-          "type": "single_choice",
-          "sourceId": "mc3",
-          "options": [
-            "暂时不盖，以便下次取物",
-            "立即将盖盖严",
-            "等所有物品用完后再盖",
-            "只盖一半"
-          ],
-          "text": "取物后，应该如何处理无菌容器盖？",
-          "acceptedAnswers": [
-            "B"
-          ],
-          "learningContent": "取物后立即盖严无菌容器。",
-          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
-        },
-        {
-          "id": "q3",
-          "type": "single_choice",
-          "sourceId": "mc4",
-          "options": [
-            "倾斜夹取，避免触碰容器",
-            "垂直夹取，避免触及容器边缘",
-            "快速夹取，无需担心触碰",
-            "使用手直接取物"
-          ],
-          "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
-          "acceptedAnswers": [
-            "B"
-          ],
-          "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
-          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
-        },
-        {
-          "id": "q4",
           "type": "single_choice",
           "sourceId": "mc2",
           "options": [
@@ -1076,19 +1030,36 @@
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
-          "id": "q5",
+          "id": "q2",
           "type": "fill_blank",
-          "sourceId": "mb6",
-          "text": "无菌包的包布通常选用____材料制成。",
+          "sourceId": "mb7",
+          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
           "acceptedAnswers": [
-            "质厚、致密、未脱脂的双层棉布或医用无纺",
-            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
+            "容器名称、灭菌日期、失效期、灭菌标识",
+            "容器名称、灭菌日期、有效期、灭菌标识"
           ],
-          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
+          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
-          "id": "q6",
+          "id": "q3",
+          "type": "single_choice",
+          "sourceId": "mc3",
+          "options": [
+            "暂时不盖，以便下次取物",
+            "立即将盖盖严",
+            "等所有物品用完后再盖",
+            "只盖一半"
+          ],
+          "text": "取物后，应该如何处理无菌容器盖？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "取物后立即盖严无菌容器。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q4",
           "type": "single_choice",
           "sourceId": "mc5",
           "options": [
@@ -1105,7 +1076,24 @@
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
-          "id": "q7",
+          "id": "q5",
+          "type": "single_choice",
+          "sourceId": "mc4",
+          "options": [
+            "倾斜夹取，避免触碰容器",
+            "垂直夹取，避免触及容器边缘",
+            "快速夹取，无需担心触碰",
+            "使用手直接取物"
+          ],
+          "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q6",
           "type": "single_choice",
           "sourceId": "mc1",
           "options": [
@@ -1119,6 +1107,18 @@
             "B"
           ],
           "learningContent": "手持无菌容器应托住底部，避免触及容器边缘及内面。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q7",
+          "type": "fill_blank",
+          "sourceId": "mb6",
+          "text": "无菌包的包布通常选用____材料制成。",
+          "acceptedAnswers": [
+            "质厚、致密、未脱脂的双层棉布或医用无纺",
+            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
+          ],
+          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         }
       ],
@@ -1133,12 +1133,12 @@
         "wrongZonePlacements": 1,
         "answers": {
           "q1": "B",
-          "q2": "B",
+          "q2": "容器名称、灭菌日期、失效期、灭菌标识",
           "q3": "B",
           "q4": "B",
-          "q5": "B",
-          "q6": "质厚、致密、未脱脂的双层棉布或医用无纺",
-          "q7": "容器名称、灭菌日期、失效期、灭菌标识"
+          "q5": "质厚、致密、未脱脂的双层棉布或医用无纺",
+          "q6": "B",
+          "q7": "B"
         },
         "fragmentsCollected": 7,
         "reachedExit": true,
@@ -1147,6 +1147,35 @@
       "questions": [
         {
           "id": "q1",
+          "type": "single_choice",
+          "sourceId": "mc5",
+          "options": [
+            "包布的内面",
+            "包布四角的外面",
+            "包内无菌物品",
+            "包布的任意部分"
+          ],
+          "text": "打开无菌包时，手可以接触包布的哪个部分？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "打开无菌包时，手只能接触包布四角的外面，不可触及内面或包内物品。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q2",
+          "type": "fill_blank",
+          "sourceId": "mb7",
+          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
+          "acceptedAnswers": [
+            "容器名称、灭菌日期、失效期、灭菌标识",
+            "容器名称、灭菌日期、有效期、灭菌标识"
+          ],
+          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q3",
           "type": "single_choice",
           "sourceId": "mc4",
           "options": [
@@ -1163,7 +1192,7 @@
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
-          "id": "q2",
+          "id": "q4",
           "type": "single_choice",
           "sourceId": "mc2",
           "options": [
@@ -1181,7 +1210,19 @@
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
-          "id": "q3",
+          "id": "q5",
+          "type": "fill_blank",
+          "sourceId": "mb6",
+          "text": "无菌包的包布通常选用____材料制成。",
+          "acceptedAnswers": [
+            "质厚、致密、未脱脂的双层棉布或医用无纺",
+            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
+          ],
+          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q6",
           "type": "single_choice",
           "sourceId": "mc3",
           "options": [
@@ -1198,7 +1239,7 @@
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
-          "id": "q4",
+          "id": "q7",
           "type": "single_choice",
           "sourceId": "mc1",
           "options": [
@@ -1212,47 +1253,6 @@
             "B"
           ],
           "learningContent": "手持无菌容器应托住底部，避免触及容器边缘及内面。",
-          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
-        },
-        {
-          "id": "q5",
-          "type": "single_choice",
-          "sourceId": "mc5",
-          "options": [
-            "包布的内面",
-            "包布四角的外面",
-            "包内无菌物品",
-            "包布的任意部分"
-          ],
-          "text": "打开无菌包时，手可以接触包布的哪个部分？",
-          "acceptedAnswers": [
-            "B"
-          ],
-          "learningContent": "打开无菌包时，手只能接触包布四角的外面，不可触及内面或包内物品。",
-          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
-        },
-        {
-          "id": "q6",
-          "type": "fill_blank",
-          "sourceId": "mb6",
-          "text": "无菌包的包布通常选用____材料制成。",
-          "acceptedAnswers": [
-            "质厚、致密、未脱脂的双层棉布或医用无纺",
-            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
-          ],
-          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
-          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
-        },
-        {
-          "id": "q7",
-          "type": "fill_blank",
-          "sourceId": "mb7",
-          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
-          "acceptedAnswers": [
-            "容器名称、灭菌日期、失效期、灭菌标识",
-            "容器名称、灭菌日期、有效期、灭菌标识"
-          ],
-          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         }
       ],
@@ -1268,11 +1268,11 @@
         "answers": {
           "q1": "B",
           "q2": "B",
-          "q3": "质厚、致密、未脱脂的双层棉布或医用无纺",
+          "q3": "B",
           "q4": "B",
-          "q5": "B",
-          "q6": "容器名称、灭菌日期、失效期、灭菌标识",
-          "q7": "B"
+          "q5": "容器名称、灭菌日期、失效期、灭菌标识",
+          "q6": "B",
+          "q7": "质厚、致密、未脱脂的双层棉布或医用无纺"
         },
         "fragmentsCollected": 7,
         "reachedExit": true,
@@ -1282,18 +1282,18 @@
         {
           "id": "q1",
           "type": "single_choice",
-          "sourceId": "mc5",
+          "sourceId": "mc4",
           "options": [
-            "包布的内面",
-            "包布四角的外面",
-            "包内无菌物品",
-            "包布的任意部分"
+            "倾斜夹取，避免触碰容器",
+            "垂直夹取，避免触及容器边缘",
+            "快速夹取，无需担心触碰",
+            "使用手直接取物"
           ],
-          "text": "打开无菌包时，手可以接触包布的哪个部分？",
+          "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
           "acceptedAnswers": [
             "B"
           ],
-          "learningContent": "打开无菌包时，手只能接触包布四角的外面，不可触及内面或包内物品。",
+          "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
@@ -1316,18 +1316,6 @@
         },
         {
           "id": "q3",
-          "type": "fill_blank",
-          "sourceId": "mb6",
-          "text": "无菌包的包布通常选用____材料制成。",
-          "acceptedAnswers": [
-            "质厚、致密、未脱脂的双层棉布或医用无纺",
-            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
-          ],
-          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
-          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
-        },
-        {
-          "id": "q4",
           "type": "single_choice",
           "sourceId": "mc3",
           "options": [
@@ -1344,7 +1332,36 @@
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
+          "id": "q4",
+          "type": "single_choice",
+          "sourceId": "mc5",
+          "options": [
+            "包布的内面",
+            "包布四角的外面",
+            "包内无菌物品",
+            "包布的任意部分"
+          ],
+          "text": "打开无菌包时，手可以接触包布的哪个部分？",
+          "acceptedAnswers": [
+            "B"
+          ],
+          "learningContent": "打开无菌包时，手只能接触包布四角的外面，不可触及内面或包内物品。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
           "id": "q5",
+          "type": "fill_blank",
+          "sourceId": "mb7",
+          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
+          "acceptedAnswers": [
+            "容器名称、灭菌日期、失效期、灭菌标识",
+            "容器名称、灭菌日期、有效期、灭菌标识"
+          ],
+          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q6",
           "type": "single_choice",
           "sourceId": "mc1",
           "options": [
@@ -1361,32 +1378,15 @@
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
-          "id": "q6",
-          "type": "fill_blank",
-          "sourceId": "mb7",
-          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
-          "acceptedAnswers": [
-            "容器名称、灭菌日期、失效期、灭菌标识",
-            "容器名称、灭菌日期、有效期、灭菌标识"
-          ],
-          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
-          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
-        },
-        {
           "id": "q7",
-          "type": "single_choice",
-          "sourceId": "mc4",
-          "options": [
-            "倾斜夹取，避免触碰容器",
-            "垂直夹取，避免触及容器边缘",
-            "快速夹取，无需担心触碰",
-            "使用手直接取物"
-          ],
-          "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
+          "type": "fill_blank",
+          "sourceId": "mb6",
+          "text": "无菌包的包布通常选用____材料制成。",
           "acceptedAnswers": [
-            "B"
+            "质厚、致密、未脱脂的双层棉布或医用无纺",
+            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
           ],
-          "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
+          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         }
       ],
@@ -1400,13 +1400,13 @@
         "wrongTaps": 30,
         "wrongZonePlacements": 30,
         "answers": {
-          "q1": "B",
-          "q2": "容器名称、灭菌日期、失效期、灭菌标识",
-          "q3": "质厚、致密、未脱脂的双层棉布或医用无纺",
+          "q1": "质厚、致密、未脱脂的双层棉布或医用无纺",
+          "q2": "B",
+          "q3": "B",
           "q4": "B",
           "q5": "B",
           "q6": "B",
-          "q7": "B"
+          "q7": "容器名称、灭菌日期、失效期、灭菌标识"
         },
         "fragmentsCollected": 7,
         "reachedExit": true,
@@ -1415,6 +1415,18 @@
       "questions": [
         {
           "id": "q1",
+          "type": "fill_blank",
+          "sourceId": "mb6",
+          "text": "无菌包的包布通常选用____材料制成。",
+          "acceptedAnswers": [
+            "质厚、致密、未脱脂的双层棉布或医用无纺",
+            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
+          ],
+          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q2",
           "type": "single_choice",
           "sourceId": "mc4",
           "options": [
@@ -1431,27 +1443,21 @@
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
-          "id": "q2",
-          "type": "fill_blank",
-          "sourceId": "mb7",
-          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
-          "acceptedAnswers": [
-            "容器名称、灭菌日期、失效期、灭菌标识",
-            "容器名称、灭菌日期、有效期、灭菌标识"
-          ],
-          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
-          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
-        },
-        {
           "id": "q3",
-          "type": "fill_blank",
-          "sourceId": "mb6",
-          "text": "无菌包的包布通常选用____材料制成。",
-          "acceptedAnswers": [
-            "质厚、致密、未脱脂的双层棉布或医用无纺",
-            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
+          "type": "single_choice",
+          "sourceId": "mc2",
+          "options": [
+            "将盖子直接翻转放在桌上",
+            "将盖子平移离开容器，内面向上放置",
+            "将盖子倒置在容器旁",
+            "用手握住盖子边缘"
           ],
-          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
+          "text": "打开无菌容器盖时，正确的做法是？",
+          "acceptedAnswers": [
+            "B",
+            "C"
+          ],
+          "learningContent": "盖内面应朝上放在稳妥处，手不可触及内面及边缘。原题 B 与 C 表述重合，均予认可。",
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
@@ -1474,24 +1480,6 @@
         {
           "id": "q5",
           "type": "single_choice",
-          "sourceId": "mc2",
-          "options": [
-            "将盖子直接翻转放在桌上",
-            "将盖子平移离开容器，内面向上放置",
-            "将盖子倒置在容器旁",
-            "用手握住盖子边缘"
-          ],
-          "text": "打开无菌容器盖时，正确的做法是？",
-          "acceptedAnswers": [
-            "B",
-            "C"
-          ],
-          "learningContent": "盖内面应朝上放在稳妥处，手不可触及内面及边缘。原题 B 与 C 表述重合，均予认可。",
-          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
-        },
-        {
-          "id": "q6",
-          "type": "single_choice",
           "sourceId": "mc5",
           "options": [
             "包布的内面",
@@ -1507,7 +1495,7 @@
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
-          "id": "q7",
+          "id": "q6",
           "type": "single_choice",
           "sourceId": "mc3",
           "options": [
@@ -1521,6 +1509,18 @@
             "B"
           ],
           "learningContent": "取物后立即盖严无菌容器。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q7",
+          "type": "fill_blank",
+          "sourceId": "mb7",
+          "text": "使用无菌容器前，应检查并核对____、____、____、____。",
+          "acceptedAnswers": [
+            "容器名称、灭菌日期、失效期、灭菌标识",
+            "容器名称、灭菌日期、有效期、灭菌标识"
+          ],
+          "learningContent": "使用无菌容器前，应检查并核对容器名称、灭菌日期、失效期、灭菌标识。",
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         }
       ],
@@ -1534,6 +1534,24 @@
         {
           "id": "q1",
           "type": "single_choice",
+          "sourceId": "mc2",
+          "options": [
+            "将盖子直接翻转放在桌上",
+            "将盖子平移离开容器，内面向上放置",
+            "将盖子倒置在容器旁",
+            "用手握住盖子边缘"
+          ],
+          "text": "打开无菌容器盖时，正确的做法是？",
+          "acceptedAnswers": [
+            "B",
+            "C"
+          ],
+          "learningContent": "盖内面应朝上放在稳妥处，手不可触及内面及边缘。原题 B 与 C 表述重合，均予认可。",
+          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
+        },
+        {
+          "id": "q2",
+          "type": "single_choice",
           "sourceId": "mc1",
           "options": [
             "握住容器边缘",
@@ -1549,32 +1567,20 @@
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
-          "id": "q2",
-          "type": "fill_blank",
-          "sourceId": "mb6",
-          "text": "无菌包的包布通常选用____材料制成。",
-          "acceptedAnswers": [
-            "质厚、致密、未脱脂的双层棉布或医用无纺",
-            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
-          ],
-          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
-          "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
-        },
-        {
           "id": "q3",
           "type": "single_choice",
-          "sourceId": "mc3",
+          "sourceId": "mc4",
           "options": [
-            "暂时不盖，以便下次取物",
-            "立即将盖盖严",
-            "等所有物品用完后再盖",
-            "只盖一半"
+            "倾斜夹取，避免触碰容器",
+            "垂直夹取，避免触及容器边缘",
+            "快速夹取，无需担心触碰",
+            "使用手直接取物"
           ],
-          "text": "取物后，应该如何处理无菌容器盖？",
+          "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
           "acceptedAnswers": [
             "B"
           ],
-          "learningContent": "取物后立即盖严无菌容器。",
+          "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
@@ -1596,37 +1602,31 @@
         },
         {
           "id": "q5",
-          "type": "single_choice",
-          "sourceId": "mc4",
-          "options": [
-            "倾斜夹取，避免触碰容器",
-            "垂直夹取，避免触及容器边缘",
-            "快速夹取，无需担心触碰",
-            "使用手直接取物"
-          ],
-          "text": "使用无菌持物钳从无菌容器中取物时，应如何夹取？",
+          "type": "fill_blank",
+          "sourceId": "mb6",
+          "text": "无菌包的包布通常选用____材料制成。",
           "acceptedAnswers": [
-            "B"
+            "质厚、致密、未脱脂的双层棉布或医用无纺",
+            "质厚、致密、未脱脂的双层棉布或医用无纺材料"
           ],
-          "learningContent": "使用无菌持物钳垂直夹取物品，避免触及容器边缘。",
+          "learningContent": "无菌包的包布通常选用质厚、致密、未脱脂的双层棉布或医用无纺材料制成。",
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {
           "id": "q6",
           "type": "single_choice",
-          "sourceId": "mc2",
+          "sourceId": "mc3",
           "options": [
-            "将盖子直接翻转放在桌上",
-            "将盖子平移离开容器，内面向上放置",
-            "将盖子倒置在容器旁",
-            "用手握住盖子边缘"
+            "暂时不盖，以便下次取物",
+            "立即将盖盖严",
+            "等所有物品用完后再盖",
+            "只盖一半"
           ],
-          "text": "打开无菌容器盖时，正确的做法是？",
+          "text": "取物后，应该如何处理无菌容器盖？",
           "acceptedAnswers": [
-            "B",
-            "C"
+            "B"
           ],
-          "learningContent": "盖内面应朝上放在稳妥处，手不可触及内面及边缘。原题 B 与 C 表述重合，均予认可。",
+          "learningContent": "取物后立即盖严无菌容器。",
           "learningAsset": "assets/generated/sprites/components/sterile_pack.png"
         },
         {

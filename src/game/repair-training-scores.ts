@@ -3,7 +3,7 @@ import { PrismaService } from '../database/prisma.service';
 import { LevelsService } from '../levels/levels.service';
 import { LeaderboardService } from '../leaderboard/leaderboard.service';
 
-// Regrade only completed training affected by the old hunt/maze penalties.
+// Regrade only completed maze training affected by the old wall penalties.
 // Keep original ScoreEvents as audit history; do not create another attempt.
 export async function repairTrainingScores(
   prisma: PrismaService, levels: LevelsService, leaderboard: LeaderboardService,
@@ -12,7 +12,7 @@ export async function repairTrainingScores(
   let cursor: string | undefined;
   let eligible = 0;
   let updated = 0;
-  const levelIds = ['level-2-glove-forceps-hunt', 'level-3-container-maze'];
+  const levelIds = ['level-3-container-maze'];
   for (;;) {
     const batch = await prisma.gameSession.findMany({
       where: {levelId:{in:levelIds}, status:{in:[SessionStatus.COMPLETED, SessionStatus.FAILED]}},

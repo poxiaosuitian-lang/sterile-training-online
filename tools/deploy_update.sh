@@ -18,7 +18,7 @@ test -s "$backup_file"
 
 compose up -d --build --wait --wait-timeout 180 api
 compose exec -T api node -e "fetch('http://localhost:3000/api/v1/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
-echo 'Recalculating affected completed hunt/maze submissions (attempt counts stay unchanged).'
+echo 'Recalculating affected completed maze submissions (attempt counts stay unchanged).'
 compose exec -T api node dist/maintenance/repair-scores.js --apply
 python3 tools/update_apk.py
 echo 'Server and APK release updated. Players can restart the app to check for updates.'

@@ -246,7 +246,7 @@ export class LevelsService {
 
       return this.finish(
         level,
-        this.gate(level, avgScore, totalTargets > 0 && totalCorrect === totalTargets),
+        totalCorrect === totalTargets ? avgScore : Math.min(avgScore, level.passScore - 1),
         totalWrong === 0 ? ['所有阶段识别准确'] : stageFeedback,
         { totalCorrect, totalWrong, totalTargets, stages: publicConfig.stages.length },
       );
