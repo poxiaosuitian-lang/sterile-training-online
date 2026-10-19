@@ -246,7 +246,7 @@ export class LevelsService {
 
       return this.finish(
         level,
-        totalCorrect === totalTargets ? avgScore : Math.min(avgScore, level.passScore - 1),
+        this.gate(level, avgScore, totalTargets > 0 && totalCorrect === totalTargets),
         totalWrong === 0 ? ['所有阶段识别准确'] : stageFeedback,
         { totalCorrect, totalWrong, totalTargets, stages: publicConfig.stages.length },
       );
@@ -298,19 +298,20 @@ export class LevelsService {
     const fragmentPoints = (fragments / maxFragments) * 30;
     const exitBonus = exited ? 30 : 0;
     const bonusPoints = bonusAnswered * 5;
-    const collisionPenalty =
-      collisions * (publicConfig.collisionPenalty ?? 10);
+    // Wall contact is movement telemetry, not an aseptic knowledge mistake.
+    // Ignore even legacy clients' collision counts when grading.
+    const collisionPenalty = 0;
     const contaminationPenalty = contaminationHits * 15;
 
     const score = answerPoints + fragmentPoints + exitBonus + bonusPoints - collisionPenalty - contaminationPenalty;
 
     return this.finish(
       level,
-      exited ? score : Math.min(score, level.passScore - 1),
+      this.gate(level, score, exited),
       exited
         ? [`已到达迷宫出口，收集${fragments}/${maxFragments}个碎片`]
         : [`尚未到达出口，收集${fragments}/${maxFragments}个碎片`],
-      { correctAnswers, fragments, collisions, contaminationHits, bonusAnswered, exited, maxFragments },
+      { correctAnswers, fragments, collisions, collisionPenalty, contaminationHits, contaminationPenalty, bonusAnswered, exited, maxFragments },
     );
   }
 

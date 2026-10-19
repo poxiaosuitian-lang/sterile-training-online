@@ -38,6 +38,28 @@ API 以非 root 用户运行；启动时自动执行数据库迁移。PostgreSQL
 
 客户端上传失败会暂存结果，在前台定时、返回应用或手动同步时重试；应用退出后不持续后台上传。登录过期时重新登录原账号补传。服务器保存提交回执，重复和并发重试只结算一次。普通联网玩家不能启用开发者跳关，游客登录默认禁用。
 
+## 1.0.87 评分修复部署（2026-10-19）
+
+本次必须同时更新服务器评分代码和 APK，仅下载 APK 无法修复旧服务器的评分逻辑。在已有运行中的部署执行：
+
+```sh
+cd /opt/sterile-training-online
+git pull --ff-only
+sh tools/deploy_update.sh
+```
+
+脚本会先将 PostgreSQL 备份到仓库旁的 `sterile-training-backups/`，随后重建 API 并等待健康检查，修复符合条件的历史第二、三关成绩，再从 GitHub 最新 Release 发布 APK。需要 Python 3、支持 `--wait` 的 Docker Compose，以及 GitHub 下载访问。过程失败会停止；如果最后下载 APK 失败，服务器评分已修复，可稍后单独重试 `python3 tools/update_apk.py`。
+
+评分规则：第三关碰墙只阻挡移动，不扣分；集齐七个碎片、答案正确且到达出口才算完成。污染区扣分保留，但完成后最低 60 分。第二关找齐所有目标后同样最低 60 分；未完成要求的记录不会被补成通关。第一、四、五关维持原有判定。
+
+历史修复根据数据库原始 submission 和当次 challenge 重算，只修正第二、三关已完成要求且分数可提高的记录，更新最高分、通关及下一关解锁，保留挑战次数与原始 ScoreEvent 审计记录。旧回执保存在新回执的 `scoringCorrection.previousReceipt` 中。重复执行不会重复增加成绩或次数；缺少原始提交/回执的记录不会凭空补分。可先单独预览（不加 `--apply` 不写入）：
+
+```sh
+docker compose --env-file deploy/.env -f deploy/compose.yml exec -T api node dist/maintenance/repair-scores.js
+```
+
+更新后访问 `/api/v1/levels`，第二、三关版本应为 7，第三关 `collisionPenalty` 为 0；`/api/v1/app/release` 应显示 1.0.87 / 88。玩家重新打开应用检查更新；历史成绩修复后，在首页刷新或重新登录即可同步。
+
 ## 从 GitHub 更新服务器上的 APK
 
 开发机把同签名 APK、`latest.json` 和 `SHA256SUMS` 发布到 GitHub Release 后，在服务器执行（需要 Python 3，且能访问 GitHub 及其下载域名）：

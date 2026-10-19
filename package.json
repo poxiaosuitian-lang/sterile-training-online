@@ -57,6 +57,7 @@
   "jest": {
     "moduleFileExtensions": ["js", "json", "ts"],
     "rootDir": ".",
+    "modulePathIgnorePatterns": ["<rootDir>/release/", "<rootDir>/tmp/"],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"

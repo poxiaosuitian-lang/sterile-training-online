@@ -8,6 +8,10 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     services:
+      redis:
+        image: redis:8-alpine
+        ports:
+          - 6379:6379
       postgres:
         image: postgres:17-alpine
         env:
@@ -21,6 +25,7 @@ jobs:
           --health-interval 5s --health-timeout 3s --health-retries 10
     env:
       DATABASE_URL: postgresql://aseptic:ci-only-password@localhost:5432/aseptic_training?schema=public
+      REDIS_URL: redis://localhost:6379
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,5 +37,11 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: python3 -m unittest discover -s tools -p 'test_update_apk.py'
+      - run: sh -n tools/deploy_update.sh
       - run: node tools/test_online_integration.cjs
       - run: docker build -t sterile-training-online:ci .
+      - name: Verify migration and repair command in production image
+        run: >-
+          docker run --rm --network host -e DATABASE_URL -e REDIS_URL
+          sterile-training-online:ci sh -c
+          'npx prisma migrate deploy && node dist/maintenance/repair-scores.js && node dist/maintenance/repair-scores.js --apply'

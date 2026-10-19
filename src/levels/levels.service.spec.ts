@@ -135,7 +135,7 @@ describe('LevelsService', () => {
       contaminationHits: 0,
       reachedExit: true,
     });
-    expect(collided).toMatchObject({ score: 85, stars: 2 });
+    expect(collided).toMatchObject({ score: 100, stars: 3 });
 
     const forgedExit = service.validate(level, {
       answers: { ...answers, q7: '向上' },
@@ -147,6 +147,33 @@ describe('LevelsService', () => {
       fragments: 6,
       exited: false,
     });
+  });
+
+  it('does not turn a completed maze into zero after repeated wall contact', () => {
+    const base = service.find('level-3-container-maze');
+    const level = service.sessionLevel(base, service.createChallenge(base));
+    const answers = Object.fromEntries(Object.entries(level.answerKey.answers as Record<string, string[]>)
+      .map(([id, accepted]) => [id, accepted[0]]));
+    for (const collisions of [0, 1, 7, 1000]) {
+      expect(service.validate(level, {answers, fragmentsCollected:7, reachedExit:true, collisions}))
+        .toMatchObject({score:100, stars:3, passed:true, details:{correctAnswers:7, collisionPenalty:0}});
+    }
+    expect(service.validate(level, {answers, fragmentsCollected:7, reachedExit:true, contaminationHits:1}))
+      .toMatchObject({score:85, passed:true});
+    expect(service.validate(level, {answers, fragmentsCollected:7, reachedExit:true, contaminationHits:30}))
+      .toMatchObject({score:60, passed:true});
+    expect(service.validate(level, {answers, fragmentsCollected:7, reachedExit:false, bonusQuestionsAnswered:100}))
+      .toMatchObject({score:59, passed:false});
+    expect(service.validate(level, {answers:{...answers,q7:'invalid'}, fragmentsCollected:7, reachedExit:true, bonusQuestionsAnswered:100}).passed)
+      .toBe(false);
+  });
+
+  it('keeps completed hunt training passable after many wrong taps but rejects missing targets', () => {
+    const level = service.find('level-2-glove-forceps-hunt');
+    const stages = level.publicConfig.stages as Array<{id:string}>;
+    const result = Object.fromEntries(stages.map(s => [s.id, {selections:level.answerKey[`${s.id}_errors`]}]));
+    expect(service.validate(level, {...result, wrongTaps:100})).toMatchObject({score:60, passed:true});
+    expect(service.validate(level, {...result, [stages[0].id]:{selections:[]}}).passed).toBe(false);
   });
 
   it('requires both completed operation zones and enough sterility to pass level 5', () => {

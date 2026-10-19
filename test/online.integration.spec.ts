@@ -4,6 +4,9 @@ import { AppModule } from '../src/app.module';
 import { RedisService } from '../src/redis/redis.service';
 import { PrismaService } from '../src/database/prisma.service';
 import * as contract from '../src/levels/standalone-contract.json';
+import { LevelsService } from '../src/levels/levels.service';
+import { LeaderboardService } from '../src/leaderboard/leaderboard.service';
+import { repairTrainingScores } from '../src/game/repair-training-scores';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 
@@ -98,6 +101,9 @@ suite('Online accounts, persistence and administration over HTTP', () => {
       const example = contract.gradingExamples.find(e => e.levelId === level.id && e.score === 100)!;
       const result: Record<string, unknown> = { ...example.input };
       if (level.kind === 'maze_quiz') {
+        // Real touch navigation can accumulate many wall contacts. They must
+        // not erase seven correct answers or prevent unlocking the next level.
+        result.collisions = 100;
         result.answers = Object.fromEntries(start.data.level.publicConfig.questions.map(
           (q: { id: string; acceptedAnswers: string[] }) => [q.id, q.acceptedAnswers[0]],
         ));
@@ -112,5 +118,36 @@ suite('Online accounts, persistence and administration over HTTP', () => {
     expect(progress).toHaveLength(5);
     expect(progress.every((l: { progress: { completed: boolean } }) => l.progress.completed)).toBe(true);
     expect((await request('/leaderboards/overall')).data[0]).toMatchObject({ playerId: aliceId, score: 500 });
+  });
+  it('repairs historical zero scores without adding attempts and is safe to repeat', async () => {
+    const prisma = app.get(PrismaService);
+    const levels = app.get(LevelsService);
+    const leaderboard = app.get(LeaderboardService);
+    const player = await prisma.player.create({data:{deviceId:'repair-test',nickname:'修复测试'}});
+    const level = levels.find('level-3-container-maze');
+    const challenge = levels.createChallenge(level);
+    const questions = challenge.questions! as Array<{id:string;acceptedAnswers:string[]}>;
+    const submission = {answers:Object.fromEntries(questions.map(q=>[q.id,q.acceptedAnswers[0]])),
+      fragmentsCollected:7,reachedExit:true,collisions:7};
+    const session = await prisma.gameSession.create({data:{
+      playerId:player.id,levelId:level.id,levelVersion:6,challenge,
+      submission,receipt:{score:0,stars:0,passed:false},score:0,stars:0,status:'FAILED',
+      completedAt:new Date(),expiresAt:new Date('9999-12-31'),
+    }});
+    await prisma.levelProgress.create({data:{playerId:player.id,levelId:level.id,unlocked:true,attempts:1}});
+    await prisma.scoreEvent.create({data:{playerId:player.id,levelId:level.id,score:0,stars:0}});
+    expect(await repairTrainingScores(prisma,levels,leaderboard))
+      .toMatchObject({eligible:1,updated:0});
+    expect((await prisma.gameSession.findUniqueOrThrow({where:{id:session.id}})).score).toBe(0);
+    expect(await repairTrainingScores(prisma,levels,leaderboard,true)).toMatchObject({updated:1});
+    const repaired = await prisma.gameSession.findUniqueOrThrow({where:{id:session.id}});
+    expect(repaired).toMatchObject({score:100,stars:3,status:'COMPLETED'});
+    expect(repaired.receipt).toMatchObject({scoringCorrection:{previousReceipt:{score:0,passed:false}}});
+    expect(await prisma.levelProgress.findUniqueOrThrow({where:{playerId_levelId:{playerId:player.id,levelId:level.id}}}))
+      .toMatchObject({bestScore:100,completed:true,attempts:1});
+    expect(await prisma.levelProgress.findUniqueOrThrow({where:{playerId_levelId:{playerId:player.id,levelId:levels.next(level.id)!.id}}}))
+      .toMatchObject({unlocked:true});
+    expect(await prisma.scoreEvent.count({where:{playerId:player.id}})).toBe(1);
+    expect(await repairTrainingScores(prisma,levels,leaderboard,true)).toMatchObject({eligible:0,updated:0});
   });
 });
