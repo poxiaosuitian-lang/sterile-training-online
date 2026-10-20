@@ -5,7 +5,6 @@ import { RedisService } from '../src/redis/redis.service';
 import { PrismaService } from '../src/database/prisma.service';
 import * as contract from '../src/levels/standalone-contract.json';
 import { LevelsService } from '../src/levels/levels.service';
-import { LeaderboardService } from '../src/leaderboard/leaderboard.service';
 import { repairTrainingScores } from '../src/game/repair-training-scores';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -117,12 +116,13 @@ suite('Online accounts, persistence and administration over HTTP', () => {
     const progress = (await request('/game/progress', 'GET', undefined, alice)).data;
     expect(progress).toHaveLength(5);
     expect(progress.every((l: { progress: { completed: boolean } }) => l.progress.completed)).toBe(true);
-    expect((await request('/leaderboards/overall')).data[0]).toMatchObject({ playerId: aliceId, score: 500 });
+    expect(progress.reduce((sum:number,l:any)=>sum+l.progress.bestScore,0)).toBe(500);
+    expect((await request('/leaderboards/overall')).status).toBe(404);
+    expect((await request('/leaderboards/levels/level-1-concept')).status).toBe(404);
   });
   it('repairs historical zero scores without adding attempts and is safe to repeat', async () => {
     const prisma = app.get(PrismaService);
     const levels = app.get(LevelsService);
-    const leaderboard = app.get(LeaderboardService);
     const player = await prisma.player.create({data:{deviceId:'repair-test',nickname:'修复测试'}});
     const level = levels.find('level-3-container-maze');
     const challenge = levels.createChallenge(level);
@@ -147,10 +147,10 @@ suite('Online accounts, persistence and administration over HTTP', () => {
       completedAt:new Date(),expiresAt:new Date('9999-12-31'),
     }});
     await prisma.levelProgress.create({data:{playerId:player.id,levelId:hunt.id,unlocked:true,attempts:1}});
-    expect(await repairTrainingScores(prisma,levels,leaderboard))
+    expect(await repairTrainingScores(prisma,levels))
       .toMatchObject({eligible:1,updated:0});
     expect((await prisma.gameSession.findUniqueOrThrow({where:{id:session.id}})).score).toBe(0);
-    expect(await repairTrainingScores(prisma,levels,leaderboard,true)).toMatchObject({updated:1});
+    expect(await repairTrainingScores(prisma,levels,true)).toMatchObject({updated:1});
     const repaired = await prisma.gameSession.findUniqueOrThrow({where:{id:session.id}});
     expect(repaired).toMatchObject({score:100,stars:3,status:'COMPLETED'});
     expect(repaired.receipt).toMatchObject({scoringCorrection:{previousReceipt:{score:0,passed:false}}});
@@ -163,7 +163,7 @@ suite('Online accounts, persistence and administration over HTTP', () => {
       .toMatchObject({score:0,stars:0,status:'FAILED'});
     expect(await prisma.levelProgress.findUniqueOrThrow({where:{playerId_levelId:{playerId:player.id,levelId:hunt.id}}}))
       .toMatchObject({bestScore:0,completed:false,attempts:1});
-    expect(await repairTrainingScores(prisma,levels,leaderboard,true)).toMatchObject({eligible:0,updated:0});
+    expect(await repairTrainingScores(prisma,levels,true)).toMatchObject({eligible:0,updated:0});
   });
   it('manages registration, manual accounts, idempotent imports and password changes', async () => {
     expect((await request('/admin/settings','POST',{registrationEnabled:false},alice)).status).toBe(401);
@@ -203,6 +203,39 @@ suite('Online accounts, persistence and administration over HTTP', () => {
     expect((await request('/auth/options')).data.registrationEnabled).toBe(true);
   },30000);
 
+  it('requires a current admin-defined code for developer access and records authorized progress',async()=>{
+    const setting={code:'class-dev-2026'};
+    expect((await request('/auth/developer/verify','POST',setting,bob)).status).toBe(403);
+    expect((await request('/admin/developer-code','POST',setting,bob)).status).toBe(401);
+    expect((await request('/admin/developer-code','POST',{code:'123'},admin)).status).toBe(400);
+    expect((await request('/admin/developer-code','POST',setting,admin)).status).toBe(201);
+    const settings=(await request('/admin/settings','GET',undefined,admin)).data;
+    expect(settings.developerCodeConfigured).toBe(true);
+    expect(JSON.stringify(settings)).not.toContain(setting.code);
+    expect((await request('/auth/developer/verify','POST',{code:'wrong-code'},bob)).status).toBe(403);
+    const access=await request('/auth/developer/verify','POST',setting,bob);
+    expect(access.status).toBe(201);
+    const developerToken=access.data.developerToken;
+    const level=contract.levels[1];
+    const body={developerMode:true,developerToken};
+    expect((await request('/game/progress','GET',undefined,developerToken)).status).toBe(401);
+    expect((await request(`/game/levels/${level.id}/start`,'POST',body,alice)).status).toBe(403);
+    expect((await request(`/game/levels/${level.id}/start`,'POST',{...body,developerToken:bob},bob)).status).toBe(403);
+    const start=await request(`/game/levels/${level.id}/start`,'POST',body,bob);
+    expect(start.status).toBe(201);
+    const example=contract.gradingExamples.find(e=>e.levelId===level.id&&e.score===100)!;
+    const submitted=await request(`/game/sessions/${start.data.sessionId}/submit`,'POST',{
+      challengeNonce:start.data.challenge.nonce,result:example.input},bob);
+    expect(submitted.status).toBe(201);expect(submitted.data).toMatchObject({score:100,passed:true});
+    const progress=(await request('/game/progress','GET',undefined,bob)).data;
+    expect(progress[1].progress).toMatchObject({bestScore:100,completed:true});
+    expect(progress[2].progress.unlocked).toBe(true);
+    expect((await request('/admin/developer-code','POST',{code:'replaced-code'},admin)).status).toBe(201);
+    expect((await request(`/game/levels/${level.id}/start`,'POST',body,bob)).status).toBe(403);
+    expect((await request('/admin/developer-code','POST',{code:''},admin)).status).toBe(201);
+    expect((await request('/admin/settings','GET',undefined,admin)).data.developerCodeConfigured).toBe(false);
+  });
+
   it('resets only selected players, invalidates old sessions, and deletes accounts with their data',async()=>{
     const prisma=app.get(PrismaService);
     const bobPlayer=await prisma.player.findUniqueOrThrow({where:{username:'bob'}});
@@ -221,7 +254,6 @@ suite('Online accounts, persistence and administration over HTTP', () => {
     expect(await prisma.scoreEvent.count({where:{playerId:aliceId}})).toBe(0);
     expect((await request(`/game/sessions/${old.data.sessionId}/submit`,'POST',{
       ...submit,challengeNonce:old.data.challenge.nonce},alice)).status).toBe(404);
-    expect((await request('/leaderboards/overall')).data.some((p:any)=>p.playerId===aliceId)).toBe(false);
     expect((await request('/game/progress','GET',undefined,bob)).data[0].progress.bestScore).toBe(100);
     expect((await request(`/admin/players/${bobPlayer.id}`,'DELETE',undefined,alice)).status).toBe(401);
     expect((await request(`/admin/players/${bobPlayer.id}`,'DELETE',undefined,admin)).status).toBe(200);
@@ -229,7 +261,6 @@ suite('Online accounts, persistence and administration over HTTP', () => {
     expect(await prisma.gameSession.count({where:{playerId:bobPlayer.id}})).toBe(0);
     expect(await prisma.levelProgress.count({where:{playerId:bobPlayer.id}})).toBe(0);
     expect(await prisma.scoreEvent.count({where:{playerId:bobPlayer.id}})).toBe(0);
-    expect((await request('/leaderboards/overall')).data.some((p:any)=>p.playerId===bobPlayer.id)).toBe(false);
   });
 
 });

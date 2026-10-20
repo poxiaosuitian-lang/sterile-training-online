@@ -38,6 +38,7 @@ export class GameController {
       user.playerId,
       levelId,
       input?.developerMode ?? false,
+      input?.developerToken,
     );
   }
 

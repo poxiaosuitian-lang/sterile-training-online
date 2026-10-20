@@ -1,12 +1,11 @@
 import { Prisma, SessionStatus } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { LevelsService } from '../levels/levels.service';
-import { LeaderboardService } from '../leaderboard/leaderboard.service';
 
 // Regrade only completed maze training affected by the old wall penalties.
 // Keep original ScoreEvents as audit history; do not create another attempt.
 export async function repairTrainingScores(
-  prisma: PrismaService, levels: LevelsService, leaderboard: LeaderboardService,
+  prisma: PrismaService, levels: LevelsService,
   apply = false,
 ) {
   let cursor: string | undefined;
@@ -23,7 +22,8 @@ export async function repairTrainingScores(
       const saved = await prisma.$transaction(async tx => {
         // Use the same player lock as normal submissions.
         await tx.$queryRaw`SELECT id FROM "Player" WHERE id = ${candidate.playerId} FOR UPDATE`;
-        const session = await tx.gameSession.findUniqueOrThrow({where:{id:candidate.id}});
+        const session = await tx.gameSession.findUnique({where:{id:candidate.id}});
+        if (!session) return null;
         if (!session.submission || !session.receipt || !session.completedAt) return null;
         const level = levels.sessionLevel(levels.find(session.levelId), session.challenge as Record<string, unknown>);
         const validation = levels.validate(level, session.submission as Record<string, unknown>);
@@ -56,13 +56,7 @@ export async function repairTrainingScores(
         });
         return corrected;
       });
-      if (saved) {
-        updated++;
-        const player = await prisma.player.findUniqueOrThrow({where:{id:saved.playerId}});
-        const total = await prisma.levelProgress.aggregate({where:{playerId:saved.playerId},_sum:{bestScore:true}});
-        await leaderboard.recordBestEffort({playerId:player.id,nickname:player.nickname,
-          levelId:saved.levelId,levelScore:saved.bestScore,overallScore:total._sum.bestScore ?? 0});
-      }
+      if (saved) updated++;
     }
     cursor = batch[batch.length - 1].id;
   }

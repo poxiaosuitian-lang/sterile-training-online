@@ -1,5 +1,5 @@
 import { Body, CanActivate, Controller, Delete, ExecutionContext, Get, Header, Injectable, Param, ParseUUIDPipe, Post, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
-import { CreatePlayerDto, ImportPlayersDto, PlayerManagementService, RegistrationDto, ResetPlayersDto } from './player-management';
+import { CreatePlayerDto, DeveloperCodeDto, ImportPlayersDto, PlayerManagementService, RegistrationDto, ResetPlayersDto } from './player-management';
 import { JwtService } from '@nestjs/jwt';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
@@ -39,6 +39,10 @@ export class AdminController {
   @Post('players')
   @UseGuards(AdminGuard)
   createPlayer(@Body() input:CreatePlayerDto) { return this.management.create(input); }
+
+  @Post('developer-code')
+  @UseGuards(AdminGuard)
+  developerCode(@Body() input:DeveloperCodeDto) { return this.management.setDeveloperCode(input); }
 
   @Post('settings')
   @UseGuards(AdminGuard)

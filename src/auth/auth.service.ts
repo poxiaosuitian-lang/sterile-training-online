@@ -96,6 +96,20 @@ export class AuthService {
     return {registrationEnabled: setting?.value !== false};
   }
 
+  async verifyDeveloperCode(playerId:string, code:string) {
+    const setting = await this.prisma.appSetting.findUnique({where:{key:'developerAccess'}});
+    const access = setting?.value as {hash?:string;version?:string} | null;
+    if (!access?.hash) throw new ForbiddenException('管理员尚未设置开发者校验码');
+    if (!await verifyPassword(code,access.hash)) throw new ForbiddenException('校验码不正确');
+    const player = await this.prisma.player.findUnique({where:{id:playerId}});
+    if (!player) throw new UnauthorizedException('账号已失效');
+    return {
+      developerToken:await this.jwt.signAsync({role:'developer-grant',playerId,
+        authVersion:player.authVersion,codeVersion:access.version},{expiresIn:'8h'}),
+      expiresAt:new Date(Date.now()+8*60*60*1000).toISOString(),
+    };
+  }
+
   async changePassword(playerId: string, input: ChangePasswordDto) {
     if (input.currentPassword === input.newPassword) throw new BadRequestException('新密码不能与原密码相同');
     const passwordHash = await hashPassword(input.newPassword);

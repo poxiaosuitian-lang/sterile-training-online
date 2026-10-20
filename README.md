@@ -1,6 +1,6 @@
 # 无菌方舟 · 联网服务器
 
-为“无菌方舟”Android 应用提供账号、五关训练评分、成绩同步、排行榜、管理后台和 APK 更新接口。
+为“无菌方舟”Android 应用提供账号、五关训练评分、成绩同步、管理后台和 APK 更新接口。
 
 此仓库用于服务器 Docker 部署，包含 NestJS API、网页管理后台、Prisma 数据库迁移及测试。Android 客户端单独分发；安装后应用名称为 **无菌方舟**。联网 APK 从 1.0.86 起预设正式地址 `https://wu.yikui.fun/api/v1`，玩家无需手填。安装包见 [GitHub Releases](https://github.com/poxiaosuitian-lang/sterile-training-online/releases/latest)。
 
@@ -46,7 +46,7 @@ GitHub Actions 自动执行服务端单元测试、构建、PostgreSQL 集成测
 
 ## 目录
 
-- `src/`：认证、游戏进度、五关配置与评分、排行榜、后台与更新接口。
+- `src/`：认证、游戏进度、五关配置与评分、后台与更新接口。
 - `public/admin.html`：管理后台页面。
 - `prisma/`：数据库模型及迁移。
 - `deploy/`：Compose、Caddy、环境变量模板及发布目录。

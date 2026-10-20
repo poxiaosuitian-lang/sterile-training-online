@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { ChangePasswordDto, LoginDto, RegisterDto } from './dto/account.dto';
+import { ChangePasswordDto, DeveloperVerifyDto, LoginDto, RegisterDto } from './dto/account.dto';
 import { AuthGuard } from './auth.guard';
 import { AuthUser } from './auth-user';
 import { LoginRateGuard } from './login-rate.guard';
@@ -14,6 +14,12 @@ export class AuthController {
 
   @Get('options')
   options() { return this.authService.options(); }
+
+  @Post('developer/verify')
+  @UseGuards(LoginRateGuard, AuthGuard)
+  verifyDeveloper(@Req() req:{user:AuthUser}, @Body() input:DeveloperVerifyDto) {
+    return this.authService.verifyDeveloperCode(req.user.playerId,input.code);
+  }
 
   @Post('password')
   @UseGuards(LoginRateGuard, AuthGuard)

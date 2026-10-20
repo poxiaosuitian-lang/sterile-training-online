@@ -10,6 +10,11 @@ export class RegistrationDto {
   @IsBoolean()
   registrationEnabled: boolean;
 }
+export class DeveloperCodeDto {
+  @IsString()
+  @Length(0,64)
+  code: string;
+}
 export class ResetPlayersDto {
   @IsArray()
   @ArrayMinSize(1)
@@ -70,7 +75,18 @@ export class PlayerManagementService {
 
   async settings() {
     const value = await this.prisma.appSetting.findUnique({where:{key:'registrationEnabled'}});
-    return {registrationEnabled:value?.value !== false};
+    const developer = await this.prisma.appSetting.findUnique({where:{key:'developerAccess'}});
+    const access = developer?.value as {hash?:string} | null;
+    return {registrationEnabled:value?.value !== false,developerCodeConfigured:!!access?.hash};
+  }
+  async setDeveloperCode(input:DeveloperCodeDto) {
+    if (input.code && (input.code.length < 6 || input.code.trim() !== input.code)) {
+      throw new BadRequestException('校验码需为 6–64 位，且首尾不能有空格');
+    }
+    const value = {hash:input.code ? await hashPassword(input.code) : '',version:randomUUID()};
+    await this.prisma.appSetting.upsert({where:{key:'developerAccess'},
+      create:{key:'developerAccess',value},update:{value}});
+    return {developerCodeConfigured:!!input.code};
   }
   async setRegistration(input:RegistrationDto) {
     return this.prisma.$transaction(async tx => {

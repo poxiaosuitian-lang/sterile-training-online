@@ -6,16 +6,16 @@ import {
 } from '@nestjs/common';
 import { Prisma, SessionStatus } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
-import { LeaderboardService } from '../leaderboard/leaderboard.service';
 import { LevelsService } from '../levels/levels.service';
 import { SubmitLevelDto } from './dto/submit-level.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class GameService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly levels: LevelsService,
-    private readonly leaderboard: LeaderboardService,
+    private readonly jwt: JwtService,
   ) {}
 
   async progress(playerId: string) {
@@ -43,10 +43,20 @@ export class GameService {
     playerId: string,
     levelId: string,
     developerMode = false,
+    developerToken?: string,
   ) {
-    if (developerMode) throw new ForbiddenException('联网测试不允许开发者跳关');
+    if (developerMode) {
+      try {
+        const grant = await this.jwt.verifyAsync(developerToken ?? '');
+        const setting = await this.prisma.appSetting.findUnique({where:{key:'developerAccess'}});
+        const access = setting?.value as {hash?:string;version?:string} | null;
+        const player = await this.prisma.player.findUnique({where:{id:playerId}});
+        if (!access?.hash || grant.role !== 'developer-grant' || grant.playerId !== playerId ||
+          grant.codeVersion !== access.version || grant.authVersion !== player?.authVersion) throw new Error();
+      } catch { throw new ForbiddenException('开发者授权无效，请重新输入校验码'); }
+    }
     const level = this.levels.find(levelId);
-    const challenge = this.levels.createChallenge(level);
+    const challenge = {...this.levels.createChallenge(level), ...(developerMode ? {developerMode:true} : {})};
     const expiresAt = level.timeLimitSeconds > 0
       ? new Date(Date.now() + level.timeLimitSeconds * 1000)
       : new Date('9999-12-31T23:59:59.999Z');
@@ -54,7 +64,7 @@ export class GameService {
       const players = await tx.$queryRaw<Array<{id:string}>>`SELECT id FROM "Player" WHERE id = ${playerId} FOR UPDATE`;
       if (!players.length) throw new NotFoundException('玩家账号不存在');
       const progress = await tx.levelProgress.findUnique({where:{playerId_levelId:{playerId,levelId}}});
-      if (level.order !== 1 && !progress?.unlocked) throw new ForbiddenException('请先完成上一关');
+      if (!developerMode && level.order !== 1 && !progress?.unlocked) throw new ForbiddenException('请先完成上一关');
       return tx.gameSession.create({data:{playerId,levelId,levelVersion:level.version,challenge,expiresAt}});
     });
 
@@ -183,25 +193,6 @@ export class GameService {
         });
       }
       return {receipt, saved:progress};
-    });
-
-    const saved = outcome.saved;
-    if (!saved) return outcome.receipt;
-
-    const player = await this.prisma.player.findUnique({
-      where: { id: playerId },
-    });
-    if (!player) return outcome.receipt;
-    const overall = await this.prisma.levelProgress.aggregate({
-      where: { playerId },
-      _sum: { bestScore: true },
-    });
-    await this.leaderboard.recordBestEffort({
-      playerId,
-      nickname: player.nickname,
-      levelId: level.id,
-      levelScore: saved.bestScore,
-      overallScore: overall._sum.bestScore ?? 0,
     });
 
     return outcome.receipt;

@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       request.user = await this.jwtService.verifyAsync<AuthUser>(token);
-      if (!request.user.playerId || request.user.role === 'admin') {
+      if (!request.user.playerId || (request.user.role && request.user.role !== 'player')) {
         throw new UnauthorizedException('请使用玩家账号登录');
       }
       const player = await this.prisma.player.findUnique({where:{id:request.user.playerId}, select:{authVersion:true}});

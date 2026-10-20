@@ -1,8 +1,8 @@
 import { ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
-import { LeaderboardService } from '../leaderboard/leaderboard.service';
 import { LevelsService } from '../levels/levels.service';
 import { GameService } from './game.service';
+import { JwtService } from '@nestjs/jwt';
 
 describe('GameService developer mode', () => {
   const lockedLevelId = 'level-2-glove-forceps-hunt';
@@ -32,7 +32,7 @@ describe('GameService developer mode', () => {
     service = new GameService(
       prisma,
       new LevelsService(),
-      {} as LeaderboardService,
+      new JwtService({secret:'test-only-secret'}),
     );
   });
 

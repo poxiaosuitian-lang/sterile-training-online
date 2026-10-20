@@ -25,3 +25,9 @@ export class ChangePasswordDto {
   @Length(8, 128)
   newPassword: string;
 }
+
+export class DeveloperVerifyDto {
+  @IsString()
+  @Length(6,64)
+  code: string;
+}
