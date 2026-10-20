@@ -8,6 +8,9 @@ import { LevelsService } from '../src/levels/levels.service';
 import { repairTrainingScores } from '../src/game/repair-training-scores';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
+import { mkdir, writeFile, unlink } from 'node:fs/promises';
+import { join } from 'node:path';
+import { randomUUID } from 'node:crypto';
 
 const suite = process.env.RUN_ONLINE_INTEGRATION === 'true' ? describe : describe.skip;
 suite('Online accounts, persistence and administration over HTTP', () => {
@@ -262,5 +265,22 @@ suite('Online accounts, persistence and administration over HTTP', () => {
     expect(await prisma.levelProgress.count({where:{playerId:bobPlayer.id}})).toBe(0);
     expect(await prisma.scoreEvent.count({where:{playerId:bobPlayer.id}})).toBe(0);
   });
+
+  it('imports a private roster with the deployment CLI, previewing before writing',async()=>{
+    const directory=join(process.cwd(),'tmp');await mkdir(directory,{recursive:true});
+    const file=join(directory,`cli-roster-${randomUUID()}.json`);
+    await writeFile(file,JSON.stringify({players:[{username:'cli_test_001',nickname:'CLI测试学生'}]}),{mode:0o600});
+    const run=async(apply=false)=>{
+      const result=await promisify(execFile)(process.execPath,['dist/maintenance/import-players.js','--file',file,...(apply?['--apply']:[])],
+        {env:{...process.env,ROSTER_INITIAL_PASSWORD:'cli-test-password'},timeout:20000});
+      return JSON.parse(result.stdout.trim());
+    };
+    try {
+      expect(await run()).toMatchObject({mode:'dry-run',wouldCreate:1,created:0});
+      expect(await app.get(PrismaService).player.count({where:{username:'cli_test_001'}})).toBe(0);
+      expect(await run(true)).toMatchObject({mode:'apply',created:1});
+      expect(await run(true)).toMatchObject({created:0,existing:1});
+    } finally {await unlink(file);}
+  },60000);
 
 });
