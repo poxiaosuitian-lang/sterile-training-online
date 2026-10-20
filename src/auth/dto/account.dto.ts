@@ -15,3 +15,13 @@ export class RegisterDto extends LoginDto {
   @Length(1, 32)
   nickname: string;
 }
+
+export class ChangePasswordDto {
+  @IsString()
+  @Length(8, 128)
+  currentPassword: string;
+
+  @IsString()
+  @Length(8, 128)
+  newPassword: string;
+}

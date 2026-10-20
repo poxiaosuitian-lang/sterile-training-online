@@ -108,3 +108,30 @@ docker compose --env-file deploy/.env -f deploy/compose.yml ps
 ## 验证
 
 参考根目录 README。集成测试需要具有创建 schema 权限的独立测试数据库连接，建议在测试环境运行。可选浏览器测试会将测试截图和 CSV 保存到本地 `tmp/online-review/`，该目录不进入版本库。
+
+
+## 1.0.91 账号管理更新
+
+先 `git pull --ff-only`，再运行 `sh tools/deploy_update.sh`。该脚本备份数据库、重建 API、执行迁移和同步最新 APK。保留原有环境配置、数据库卷、JWT 密钥及发布签名。旧玩家凭证可继续使用；修改密码会使该玩家的旧凭证失效。更新后刷新后台页面。
+
+后台新增：
+- “新增玩家”：学号作为账号、姓名作为昵称；可设置初始密码。关闭自行注册不影响管理员添加或导入。
+- “勾选全部搜索结果”：跨页选择；可逐个取消。“重置所选进度”清除所选玩家五关成绩、进度、挑战记录和待结算会话，保留账号密码。操作前有确认。
+- “删除账号”：删除该玩家及关联记录，旧登录凭证失效。操作前有确认。
+- 注册开关：保存在数据库，重启后仍有效。默认保持开放，不会在更新时自动改变现有选择。
+- “导入玩家名单”：上传私有 JSON 并输入初始密码。格式为 `{"players":[{"username":"sample_student","nickname":"示例学生"}]}`。每批最多 1000 人；同账号同名自动合并，同账号异名整批拒绝；已有账号密码与成绩均保留。
+
+也可在容器中运行导入 CLI：
+
+```sh
+docker compose --env-file deploy/.env -f deploy/compose.yml cp /安全路径/players.json api:/tmp/players.json
+# 从安全环境变量读取初始密码，不在源码、日志或名单文件中存储密码。
+# 先导出 ROSTER_INITIAL_PASSWORD，再执行：
+docker compose --env-file deploy/.env -f deploy/compose.yml exec -T -e ROSTER_INITIAL_PASSWORD api node dist/maintenance/import-players.js --file /tmp/players.json
+docker compose --env-file deploy/.env -f deploy/compose.yml exec -T -e ROSTER_INITIAL_PASSWORD api node dist/maintenance/import-players.js --file /tmp/players.json --apply
+unset ROSTER_INITIAL_PASSWORD
+```
+
+第一条 CLI 命令只预览，第二条才写入。输出统计数量，不打印姓名或密码。完成后移除容器临时名单，私有原件仅留在受限目录。不要提交名单到公有仓库、放到 APK 下载目录或放进 Docker 构建上下文。
+
+玩家更新 APK 后，在设置中修改密码；原密码必须正确，新密码 8–128 位。登录仅需账号和密码，无需填写姓名。重置过的旧会话补传会被拒绝，玩家重新开始第一关。

@@ -20,12 +20,19 @@ model Player {
   nickname    String
   username    String?         @unique
   passwordHash String?
+  authVersion Int             @default(0)
   lastLoginAt DateTime?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
   sessions    GameSession[]
   progress    LevelProgress[]
   scoreEvents ScoreEvent[]
+}
+
+model AppSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
 }
 
 model GameSession {

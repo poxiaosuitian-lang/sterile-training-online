@@ -165,4 +165,71 @@ suite('Online accounts, persistence and administration over HTTP', () => {
       .toMatchObject({bestScore:0,completed:false,attempts:1});
     expect(await repairTrainingScores(prisma,levels,leaderboard,true)).toMatchObject({eligible:0,updated:0});
   });
+  it('manages registration, manual accounts, idempotent imports and password changes', async () => {
+    expect((await request('/admin/settings','POST',{registrationEnabled:false},alice)).status).toBe(401);
+    expect((await request('/admin/settings','POST',{registrationEnabled:'false'},admin)).status).toBe(400);
+    expect((await request('/admin/settings','POST',{registrationEnabled:false},admin)).status).toBe(201);
+    expect((await request('/auth/options')).data.registrationEnabled).toBe(false);
+    expect((await request('/auth/register','POST',{username:'closed',nickname:'禁止注册',password:'test-password-123'})).status).toBe(403);
+    const input={username:'manual_student',nickname:'手动学生',initialPassword:'test-password-789'};
+    expect((await request('/admin/players','POST',input,alice)).status).toBe(401);
+    const created=await request('/admin/players','POST',input,admin);
+    expect(created.status).toBe(201);expect(created.data.passwordHash).toBeUndefined();
+    expect((await request('/admin/players','POST',input,admin)).status).toBe(409);
+    const login=await request('/auth/login','POST',{username:input.username,password:input.initialPassword});
+    expect(login.status).toBe(201);
+    const token=login.data.accessToken;
+    expect((await request('/auth/password','POST',{currentPassword:'wrong-password',newPassword:'new-password-123'},token)).status).toBe(400);
+    const changed=await request('/auth/password','POST',{currentPassword:input.initialPassword,newPassword:'new-password-123'},token);
+    expect(changed.status).toBe(201);
+    expect((await request('/game/progress','GET',undefined,token)).status).toBe(401);
+    expect((await request('/game/progress','GET',undefined,changed.data.accessToken)).status).toBe(200);
+    expect((await request('/auth/login','POST',{username:input.username,password:input.initialPassword})).status).toBe(401);
+    expect((await request('/auth/login','POST',{username:input.username,password:'new-password-123'})).status).toBe(201);
+    const roster={players:[{username:input.username,nickname:input.nickname},
+      ...Array.from({length:53},(_,i)=>({username:'roster_'+i,nickname:'导入学生'+i}))],initialPassword:'initial-test-123'};
+    expect((await request('/admin/players/import','POST',roster,alice)).status).toBe(401);
+    const imported=await request('/admin/players/import','POST',roster,admin);
+    expect(imported.status).toBe(201);expect(imported.data).toMatchObject({created:53,existing:1});
+    expect((await request('/admin/players/import','POST',roster,admin)).data).toMatchObject({created:0,existing:54});
+    expect((await request('/auth/login','POST',{username:input.username,password:'new-password-123'})).status).toBe(201);
+    expect((await request('/admin/players/import','POST',{...roster,players:[{username:input.username,nickname:'错误姓名'}]},admin)).status).toBe(400);
+    const page1=(await request('/admin/players?search=roster_','GET',undefined,admin)).data;
+    const page2=(await request('/admin/players?search=roster_&page=2','GET',undefined,admin)).data;
+    expect(page1.total).toBe(53);expect(page1.players).toHaveLength(50);expect(page2.players).toHaveLength(3);
+    const ids=(await request('/admin/players/ids?search=roster_','GET',undefined,admin)).data.playerIds;
+    expect(new Set(ids).size).toBe(53);
+    expect((await request('/admin/settings','POST',{registrationEnabled:true},admin)).status).toBe(201);
+    expect((await request('/auth/options')).data.registrationEnabled).toBe(true);
+  },30000);
+
+  it('resets only selected players, invalidates old sessions, and deletes accounts with their data',async()=>{
+    const prisma=app.get(PrismaService);
+    const bobPlayer=await prisma.player.findUniqueOrThrow({where:{username:'bob'}});
+    const start=await request('/game/levels/level-1-concept/start','POST',{},bob);
+    const submit={challengeNonce:start.data.challenge.nonce,result:contract.gradingExamples[0].input};
+    expect((await request(`/game/sessions/${start.data.sessionId}/submit`,'POST',submit,bob)).status).toBe(201);
+    const reset={playerIds:[aliceId]};
+    expect((await request('/admin/players/reset','POST',reset,bob)).status).toBe(401);
+    expect((await request('/admin/players/reset','POST',{playerIds:[]},admin)).status).toBe(400);
+    const old=await request('/game/levels/level-1-concept/start','POST',{},alice);
+    expect((await request('/admin/players/reset','POST',reset,admin)).data.resetCount).toBe(1);
+    const progress=(await request('/game/progress','GET',undefined,alice)).data;
+    expect(progress[0].progress).toMatchObject({unlocked:true,bestScore:0,completed:false,attempts:0});
+    expect(progress.slice(1).every((l:any)=>!l.progress.unlocked)).toBe(true);
+    expect(await prisma.gameSession.count({where:{playerId:aliceId}})).toBe(0);
+    expect(await prisma.scoreEvent.count({where:{playerId:aliceId}})).toBe(0);
+    expect((await request(`/game/sessions/${old.data.sessionId}/submit`,'POST',{
+      ...submit,challengeNonce:old.data.challenge.nonce},alice)).status).toBe(404);
+    expect((await request('/leaderboards/overall')).data.some((p:any)=>p.playerId===aliceId)).toBe(false);
+    expect((await request('/game/progress','GET',undefined,bob)).data[0].progress.bestScore).toBe(100);
+    expect((await request(`/admin/players/${bobPlayer.id}`,'DELETE',undefined,alice)).status).toBe(401);
+    expect((await request(`/admin/players/${bobPlayer.id}`,'DELETE',undefined,admin)).status).toBe(200);
+    expect((await request('/game/progress','GET',undefined,bob)).status).toBe(401);
+    expect(await prisma.gameSession.count({where:{playerId:bobPlayer.id}})).toBe(0);
+    expect(await prisma.levelProgress.count({where:{playerId:bobPlayer.id}})).toBe(0);
+    expect(await prisma.scoreEvent.count({where:{playerId:bobPlayer.id}})).toBe(0);
+    expect((await request('/leaderboards/overall')).data.some((p:any)=>p.playerId===bobPlayer.id)).toBe(false);
+  });
+
 });

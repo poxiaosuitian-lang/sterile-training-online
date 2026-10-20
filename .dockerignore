@@ -17,3 +17,4 @@ deploy/.env
 **/*.jks
 **/*.keystore
 **/*.hprof
+deploy/private/

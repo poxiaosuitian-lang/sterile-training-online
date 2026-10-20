@@ -1,4 +1,5 @@
-import { Body, CanActivate, Controller, ExecutionContext, Get, Header, Injectable, Param, Post, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, CanActivate, Controller, Delete, ExecutionContext, Get, Header, Injectable, Param, ParseUUIDPipe, Post, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { CreatePlayerDto, ImportPlayersDto, PlayerManagementService, RegistrationDto, ResetPlayersDto } from './player-management';
 import { JwtService } from '@nestjs/jwt';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
@@ -29,7 +30,35 @@ export function csvCell(value: unknown) {
 @Controller('admin')
 export class AdminController {
   constructor(private readonly prisma: PrismaService, private readonly jwt: JwtService,
-    private readonly levels: LevelsService) {}
+    private readonly levels: LevelsService, private readonly management:PlayerManagementService) {}
+
+  @Get('settings')
+  @UseGuards(AdminGuard)
+  settings() { return this.management.settings(); }
+
+  @Post('players')
+  @UseGuards(AdminGuard)
+  createPlayer(@Body() input:CreatePlayerDto) { return this.management.create(input); }
+
+  @Post('settings')
+  @UseGuards(AdminGuard)
+  setSettings(@Body() input:RegistrationDto) { return this.management.setRegistration(input); }
+
+  @Get('players/ids')
+  @UseGuards(AdminGuard)
+  ids(@Query('search') search='') { return this.management.ids(search.slice(0,64)); }
+
+  @Post('players/reset')
+  @UseGuards(AdminGuard)
+  reset(@Body() input:ResetPlayersDto) { return this.management.reset(input); }
+
+  @Post('players/import')
+  @UseGuards(AdminGuard)
+  importPlayers(@Body() input:ImportPlayersDto) { return this.management.importPlayers(input); }
+
+  @Delete('players/:id')
+  @UseGuards(AdminGuard)
+  remove(@Param('id',ParseUUIDPipe) id:string) { return this.management.remove(id); }
 
   @Get()
   @Header('Content-Type', 'text/html; charset=utf-8')

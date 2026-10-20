@@ -19,13 +19,15 @@ describe('GameService developer mode', () => {
       expiresAt: data.expiresAt,
     }));
 
-    const prisma = {
+    const mock = {
+      $queryRaw: jest.fn().mockResolvedValue([{id:'player-1'}]),
       levelProgress: { findUnique: levelProgressFindUnique },
       gameSession: {
         updateMany: gameSessionUpdateMany,
         create: gameSessionCreate,
       },
-    } as unknown as PrismaService;
+    };
+    const prisma = {...mock, $transaction: (fn: (tx:typeof mock)=>unknown)=>fn(mock)} as unknown as PrismaService;
 
     service = new GameService(
       prisma,

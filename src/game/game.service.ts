@@ -46,26 +46,16 @@ export class GameService {
   ) {
     if (developerMode) throw new ForbiddenException('联网测试不允许开发者跳关');
     const level = this.levels.find(levelId);
-    const progress = await this.prisma.levelProgress.findUnique({
-      where: { playerId_levelId: { playerId, levelId } },
-    });
-
-    if (!developerMode && level.order !== 1 && !progress?.unlocked) {
-      throw new ForbiddenException('请先完成上一关');
-    }
-
     const challenge = this.levels.createChallenge(level);
     const expiresAt = level.timeLimitSeconds > 0
       ? new Date(Date.now() + level.timeLimitSeconds * 1000)
       : new Date('9999-12-31T23:59:59.999Z');
-    const session = await this.prisma.gameSession.create({
-      data: {
-        playerId,
-        levelId,
-        levelVersion: level.version,
-        challenge,
-        expiresAt,
-      },
+    const session = await this.prisma.$transaction(async tx => {
+      const players = await tx.$queryRaw<Array<{id:string}>>`SELECT id FROM "Player" WHERE id = ${playerId} FOR UPDATE`;
+      if (!players.length) throw new NotFoundException('玩家账号不存在');
+      const progress = await tx.levelProgress.findUnique({where:{playerId_levelId:{playerId,levelId}}});
+      if (level.order !== 1 && !progress?.unlocked) throw new ForbiddenException('请先完成上一关');
+      return tx.gameSession.create({data:{playerId,levelId,levelVersion:level.version,challenge,expiresAt}});
     });
 
     return {
@@ -112,7 +102,8 @@ export class GameService {
       // Serialize all score writes for a player, including concurrent retries and
       // different sessions. The saved receipt makes a lost HTTP response retryable.
       await tx.$queryRaw`SELECT id FROM "Player" WHERE id = ${playerId} FOR UPDATE`;
-      const latest = await tx.gameSession.findUniqueOrThrow({where:{id:session.id}});
+      const latest = await tx.gameSession.findUnique({where:{id:session.id}});
+      if (!latest) throw new NotFoundException('游戏记录已重置，请重新开始');
       if (latest.receipt) return {receipt:latest.receipt, saved:null};
       if (latest.status !== SessionStatus.ACTIVE) throw new BadRequestException('该游戏会话已结束');
       const current = await tx.levelProgress.findUnique({
@@ -197,9 +188,10 @@ export class GameService {
     const saved = outcome.saved;
     if (!saved) return outcome.receipt;
 
-    const player = await this.prisma.player.findUniqueOrThrow({
+    const player = await this.prisma.player.findUnique({
       where: { id: playerId },
     });
+    if (!player) return outcome.receipt;
     const overall = await this.prisma.levelProgress.aggregate({
       where: { playerId },
       _sum: { bestScore: true },

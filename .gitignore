@@ -28,3 +28,4 @@ deploy/releases/*
 **/build/
 **/local.properties
 frontend/android/.gradle/
+deploy/private/

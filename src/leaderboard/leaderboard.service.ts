@@ -43,30 +43,8 @@ export class LeaderboardService {
 
   async list(scope: string, limit: number) {
     const safeLimit = Math.max(1, Math.min(100, limit));
-    const key =
-      scope === 'overall'
-        ? 'leaderboard:overall'
-        : `leaderboard:level:${scope}`;
-
-    try {
-      const [scores, nicknames] = await Promise.all([
-        this.redis.client.zRangeWithScores(key, 0, safeLimit - 1, {
-          REV: true,
-        }),
-        this.redis.client.hGetAll(this.nicknameKey),
-      ]);
-      if (scores.length > 0) {
-        return scores.map((entry: {value:string; score:number}, index: number) => ({
-          rank: index + 1,
-          playerId: entry.value,
-          nickname: nicknames[entry.value] ?? '匿名训练员',
-          score: entry.score,
-        }));
-      }
-    } catch (error) {
-      this.logger.warn(`Redis 排行榜读取失败，切换数据库查询：${String(error)}`);
-    }
-
+    // Database results are authoritative after account deletion or progress reset.
+    // A delayed Redis write must never resurrect a cleared score.
     return scope === 'overall'
       ? this.overallFallback(safeLimit)
       : this.levelFallback(scope, safeLimit);
@@ -90,6 +68,7 @@ export class LeaderboardService {
   private async overallFallback(limit: number) {
     const rows = await this.prisma.levelProgress.groupBy({
       by: ['playerId'],
+      where: {bestScore:{gt:0}},
       _sum: { bestScore: true },
       orderBy: { _sum: { bestScore: 'desc' } },
       take: limit,
