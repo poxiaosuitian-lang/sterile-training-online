@@ -3,12 +3,14 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  HttpException,
 } from '@nestjs/common';
 import { Prisma, SessionStatus } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { LevelsService } from '../levels/levels.service';
 import { SubmitLevelDto } from './dto/submit-level.dto';
 import { JwtService } from '@nestjs/jwt';
+import { gameAccess } from './game-access';
 
 @Injectable()
 export class GameService {
@@ -61,6 +63,10 @@ export class GameService {
       ? new Date(Date.now() + level.timeLimitSeconds * 1000)
       : new Date('9999-12-31T23:59:59.999Z');
     const session = await this.prisma.$transaction(async tx => {
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock_shared(82491022)`;
+      const setting = await tx.appSetting.findUnique({where:{key:'gameAccess'}});
+      const access = gameAccess(setting?.value);
+      if (access.locked) throw new HttpException({code:'GAME_LOCKED',...access},423);
       const players = await tx.$queryRaw<Array<{id:string}>>`SELECT id FROM "Player" WHERE id = ${playerId} FOR UPDATE`;
       if (!players.length) throw new NotFoundException('玩家账号不存在');
       const progress = await tx.levelProgress.findUnique({where:{playerId_levelId:{playerId,levelId}}});

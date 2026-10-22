@@ -283,4 +283,39 @@ suite('Online accounts, persistence and administration over HTTP', () => {
     } finally {await unlink(file);}
   },60000);
 
+  it('locks new games with an editable announcement, preserves submissions, and reopens',async()=>{
+    const initial=await request('/app/access');
+    expect(initial.status).toBe(200);expect(initial.data.locked).toBe(false);
+    const started=await request('/game/levels/level-1-concept/start','POST',{},alice);
+    expect(started.status).toBe(201);
+    const notice={locked:true,title:'维护公告',message:'游戏维护中，周一上午再开放。\n谢谢配合。'};
+    expect((await request('/admin/game-access','POST',notice)).status).toBe(401);
+    expect((await request('/admin/game-access','POST',notice,alice)).status).toBe(401);
+    expect((await request('/admin/game-access','POST',{...notice,locked:'true'},admin)).status).toBe(400);
+    expect((await request('/admin/game-access','POST',{...notice,message:'   '},admin)).status).toBe(400);
+    expect((await request('/admin/game-access','POST',{...notice,message:'x'.repeat(2001)},admin)).status).toBe(400);
+    expect((await request('/admin/game-access','POST',notice,admin)).data).toEqual(notice);
+    expect((await request('/app/access')).data).toEqual(notice);
+    expect((await request('/admin/settings','GET',undefined,admin)).data.gameAccess).toEqual(notice);
+    const blocked=await request('/game/levels/level-1-concept/start','POST',{},alice);
+    expect(blocked.status).toBe(423);expect(blocked.data).toMatchObject({...notice,code:'GAME_LOCKED'});
+    expect((await request('/game/progress','GET',undefined,alice)).status).toBe(200);
+    const submitted=await request(`/game/sessions/${started.data.sessionId}/submit`,'POST',{
+      challengeNonce:started.data.challenge.nonce,result:contract.gradingExamples[0].input},alice);
+    expect(submitted.status).toBe(201);expect(submitted.data.passed).toBe(true);
+    const prisma=app.get(PrismaService);
+    const player=await prisma.player.findUniqueOrThrow({where:{id:aliceId}});
+    await prisma.appSetting.upsert({where:{key:'developerAccess'},create:{key:'developerAccess',value:{hash:'test-only',version:'maintenance-test'}},update:{value:{hash:'test-only',version:'maintenance-test'}}});
+    const {JwtService}=await import('@nestjs/jwt');
+    const developerToken=await app.get(JwtService).signAsync({role:'developer-grant',playerId:aliceId,authVersion:player.authVersion,codeVersion:'maintenance-test'},{expiresIn:'5m'});
+    expect((await request('/game/levels/level-1-concept/start','POST',{developerMode:true,developerToken},alice)).status).toBe(423);
+    const updated={...notice,message:'维护延期，请等待新的开放通知。'};
+    await request('/admin/game-access','POST',updated,admin);
+    expect((await request('/app/access')).data.message).toBe(updated.message);
+    await request('/admin/game-access','POST',{...updated,locked:false},admin);
+    expect((await request('/app/access')).data.locked).toBe(false);
+    expect((await request('/game/levels/level-1-concept/start','POST',{},alice)).status).toBe(201);
+    expect((await request('/admin/export','GET',undefined,admin)).status).toBe(200);
+  });
+
 });

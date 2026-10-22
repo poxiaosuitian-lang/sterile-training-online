@@ -2,9 +2,19 @@ import { Controller, Get, Header, NotFoundException, Param, StreamableFile } fro
 import { createReadStream } from 'node:fs';
 import { readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
+import { PrismaService } from '../database/prisma.service';
+import { gameAccess } from '../game/game-access';
 
 @Controller('app')
 export class ReleaseController {
+  constructor(private readonly prisma:PrismaService) {}
+
+  @Get('access')
+  @Header('Cache-Control','no-store')
+  async access() {
+    const setting = await this.prisma.appSetting.findUnique({where:{key:'gameAccess'}});
+    return gameAccess(setting?.value);
+  }
   private readonly directory = process.env.RELEASE_DIR || join(process.cwd(), 'deploy/releases');
 
   @Get('release')

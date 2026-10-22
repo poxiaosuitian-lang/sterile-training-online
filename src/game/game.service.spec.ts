@@ -20,6 +20,8 @@ describe('GameService developer mode', () => {
     }));
 
     const mock = {
+      $executeRaw: jest.fn().mockResolvedValue(1),
+      appSetting: {findUnique:jest.fn().mockResolvedValue(null)},
       $queryRaw: jest.fn().mockResolvedValue([{id:'player-1'}]),
       levelProgress: { findUnique: levelProgressFindUnique },
       gameSession: {

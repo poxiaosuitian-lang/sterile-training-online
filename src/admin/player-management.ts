@@ -5,6 +5,22 @@ import { randomUUID } from 'node:crypto';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 import { hashPassword } from '../auth/password';
+import { gameAccess } from '../game/game-access';
+
+export class GameAccessDto {
+  @IsBoolean()
+  locked: boolean;
+
+  @IsString()
+  @Matches(/\S/)
+  @Length(1,60)
+  title: string;
+
+  @IsString()
+  @Matches(/\S/)
+  @Length(1,2000)
+  message: string;
+}
 
 export class RegistrationDto {
   @IsBoolean()
@@ -77,7 +93,17 @@ export class PlayerManagementService {
     const value = await this.prisma.appSetting.findUnique({where:{key:'registrationEnabled'}});
     const developer = await this.prisma.appSetting.findUnique({where:{key:'developerAccess'}});
     const access = developer?.value as {hash?:string} | null;
-    return {registrationEnabled:value?.value !== false,developerCodeConfigured:!!access?.hash};
+    const notice = await this.prisma.appSetting.findUnique({where:{key:'gameAccess'}});
+    return {registrationEnabled:value?.value !== false,developerCodeConfigured:!!access?.hash,
+      gameAccess:gameAccess(notice?.value)};
+  }
+  async setGameAccess(input:GameAccessDto) {
+    const value = {locked:input.locked,title:input.title.trim(),message:input.message.trim()};
+    return this.prisma.$transaction(async tx => {
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(82491022)`;
+      await tx.appSetting.upsert({where:{key:'gameAccess'},create:{key:'gameAccess',value},update:{value}});
+      return value;
+    });
   }
   async setDeveloperCode(input:DeveloperCodeDto) {
     if (input.code && (input.code.length < 6 || input.code.trim() !== input.code)) {

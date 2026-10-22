@@ -1,5 +1,5 @@
 import { Body, CanActivate, Controller, Delete, ExecutionContext, Get, Header, Injectable, Param, ParseUUIDPipe, Post, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
-import { CreatePlayerDto, DeveloperCodeDto, ImportPlayersDto, PlayerManagementService, RegistrationDto, ResetPlayersDto } from './player-management';
+import { CreatePlayerDto, DeveloperCodeDto, GameAccessDto, ImportPlayersDto, PlayerManagementService, RegistrationDto, ResetPlayersDto } from './player-management';
 import { JwtService } from '@nestjs/jwt';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
@@ -35,6 +35,10 @@ export class AdminController {
   @Get('settings')
   @UseGuards(AdminGuard)
   settings() { return this.management.settings(); }
+
+  @Post('game-access')
+  @UseGuards(AdminGuard)
+  gameAccess(@Body() input:GameAccessDto) { return this.management.setGameAccess(input); }
 
   @Post('players')
   @UseGuards(AdminGuard)
