@@ -3,9 +3,11 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { installWebClient } from './web-client';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  installWebClient(app);
   const config = app.get(ConfigService);
   if (config.get('NODE_ENV') === 'production') {
     const secret = config.get<string>('JWT_SECRET', '');

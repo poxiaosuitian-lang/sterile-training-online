@@ -1,5 +1,19 @@
 # Docker 部署与维护
 
+## 独立域名的网页入口（web-1.0.93）
+
+管理员域名继续使用 `SITE_ADDRESS`（现有 wu.yikui.fun），游戏使用另一个域名 `GAME_SITE_ADDRESS`，由服务器管理员自行填写。两者必须不同，DNS 均指向服务器。学生打开游戏域名根地址自动进入 `/play/`，管理员仍使用原域名的 `/api/v1/admin`。
+
+使用仓库 Caddy 时：在 `deploy/.env` 设置 `GAME_SITE_ADDRESS=你的游戏域名`，然后复制 `deploy/game-domain.Caddyfile.example` 为 `deploy/game-sites/player.caddy`。运行 `git pull --ff-only`、`sh tools/deploy_update.sh` 更新 API 后，执行 `docker compose --env-file deploy/.env -f deploy/compose.yml up -d --force-recreate gateway` 应用新增域名与挂载，再校验日志和证书。启用游戏站点文件前必须填写域名。自定义 Nginx/面板部署可按模板配置同等路由。
+
+游戏域名只开放 `/play/` 和玩家 API，管理员路径、下载接口和文档返回 404；管理员域名不提供 `/play/`。原安卓客户端的 API 地址和 APK 更新保持正常。游戏网页调用自己的域名下 `/api/v1`，代理至同一个 API 容器，共用账号、成绩、密码、开发者校验码和维护设置，不需要跨域授权。
+
+iPhone 使用 Safari 横屏打开，可在分享菜单中添加到主屏幕，无需 IPA、苹果开发者账号或 TestFlight。首次加载后点击“进入方舟”启用浏览器音效。网页文件位于 `public/play`，随 Docker 镜像部署，服务器无需安装 Flutter。中文字体和渲染器由游戏站点本身提供。
+
+资源使用 no-cache 重新验证，不注册离线 Service Worker。更新后刷新获取新版本，进行中的关卡不要刷新。网络失败的已完成成绩会在同一浏览器暂存重试；清理网站数据会丢失本地待上传记录，服务器已保存成绩不受影响。网页测试版本为 web-1.0.93；安卓仍使用原 APK，不修改 latest.json。
+
+验证游戏域名的 `/play/`、`/play/main.dart.js`、`/play/canvaskit/canvaskit.wasm` 返回 200，`/api/v1/admin` 返回 404；管理员域名的后台正常且 `/play/` 返回 404。实际 iPhone 的音频、键盘和后台恢复仍需真机验收。
+
 以下命令均在仓库根目录执行。
 
 ## 首次部署

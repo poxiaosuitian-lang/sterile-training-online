@@ -29,3 +29,4 @@ deploy/releases/*
 **/local.properties
 frontend/android/.gradle/
 deploy/private/
+deploy/game-sites/*.caddy

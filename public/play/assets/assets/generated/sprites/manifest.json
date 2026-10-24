@@ -1,0 +1,733 @@
+{
+  "source": "assets/generated/source/aseptic_sprite_atlas_source.png",
+  "componentSize": 256,
+  "components": {
+    "nurse_idle": {
+      "path": "assets/generated/sprites/components/nurse_idle.png",
+      "sourceCell": [
+        0,
+        10,
+        236,
+        246
+      ],
+      "source_bbox": [
+        65,
+        32,
+        179,
+        236
+      ],
+      "frame_bbox": [
+        71,
+        26,
+        185,
+        230
+      ]
+    },
+    "nurse_walk_1": {
+      "path": "assets/generated/sprites/components/nurse_walk_1.png",
+      "sourceCell": [
+        226,
+        10,
+        462,
+        246
+      ],
+      "source_bbox": [
+        47,
+        35,
+        171,
+        236
+      ],
+      "frame_bbox": [
+        66,
+        27,
+        190,
+        228
+      ]
+    },
+    "nurse_walk_2": {
+      "path": "assets/generated/sprites/components/nurse_walk_2.png",
+      "sourceCell": [
+        456,
+        10,
+        692,
+        246
+      ],
+      "source_bbox": [
+        41,
+        35,
+        162,
+        236
+      ],
+      "frame_bbox": [
+        67,
+        27,
+        188,
+        228
+      ]
+    },
+    "nurse_attack": {
+      "path": "assets/generated/sprites/components/nurse_attack.png",
+      "sourceCell": [
+        686,
+        10,
+        922,
+        246
+      ],
+      "source_bbox": [
+        17,
+        44,
+        196,
+        236
+      ],
+      "frame_bbox": [
+        38,
+        32,
+        217,
+        224
+      ]
+    },
+    "virus_large": {
+      "path": "assets/generated/sprites/components/virus_large.png",
+      "sourceCell": [
+        909,
+        2,
+        1161,
+        254
+      ],
+      "source_bbox": [
+        18,
+        61,
+        215,
+        252
+      ],
+      "frame_bbox": [
+        29,
+        32,
+        226,
+        223
+      ]
+    },
+    "virus_small": {
+      "path": "assets/generated/sprites/components/virus_small.png",
+      "sourceCell": [
+        1137,
+        10,
+        1373,
+        246
+      ],
+      "source_bbox": [
+        53,
+        99,
+        183,
+        230
+      ],
+      "frame_bbox": [
+        63,
+        62,
+        193,
+        193
+      ]
+    },
+    "cloth_obstacle": {
+      "path": "assets/generated/sprites/components/cloth_obstacle.png",
+      "sourceCell": [
+        0,
+        268,
+        236,
+        504
+      ],
+      "source_bbox": [
+        37,
+        57,
+        205,
+        217
+      ],
+      "frame_bbox": [
+        44,
+        48,
+        212,
+        208
+      ]
+    },
+    "medical_cart": {
+      "path": "assets/generated/sprites/components/medical_cart.png",
+      "sourceCell": [
+        226,
+        268,
+        462,
+        504
+      ],
+      "source_bbox": [
+        31,
+        50,
+        193,
+        223
+      ],
+      "frame_bbox": [
+        47,
+        41,
+        209,
+        214
+      ]
+    },
+    "block_sterile": {
+      "path": "assets/generated/sprites/components/block_sterile.png",
+      "sourceCell": [
+        456,
+        268,
+        692,
+        504
+      ],
+      "source_bbox": [
+        28,
+        60,
+        180,
+        217
+      ],
+      "frame_bbox": [
+        52,
+        49,
+        204,
+        206
+      ]
+    },
+    "block_contaminated": {
+      "path": "assets/generated/sprites/components/block_contaminated.png",
+      "sourceCell": [
+        686,
+        268,
+        922,
+        504
+      ],
+      "source_bbox": [
+        35,
+        62,
+        186,
+        218
+      ],
+      "frame_bbox": [
+        52,
+        50,
+        203,
+        206
+      ]
+    },
+    "block_tool": {
+      "path": "assets/generated/sprites/components/block_tool.png",
+      "sourceCell": [
+        917,
+        268,
+        1153,
+        504
+      ],
+      "source_bbox": [
+        35,
+        61,
+        186,
+        217
+      ],
+      "frame_bbox": [
+        52,
+        50,
+        203,
+        206
+      ]
+    },
+    "disinfectant_bottle": {
+      "path": "assets/generated/sprites/components/disinfectant_bottle.png",
+      "sourceCell": [
+        1137,
+        268,
+        1373,
+        504
+      ],
+      "source_bbox": [
+        73,
+        41,
+        172,
+        229
+      ],
+      "frame_bbox": [
+        78,
+        34,
+        177,
+        222
+      ]
+    },
+    "broom": {
+      "path": "assets/generated/sprites/components/broom.png",
+      "sourceCell": [
+        0,
+        502,
+        236,
+        738
+      ],
+      "source_bbox": [
+        72,
+        25,
+        186,
+        213
+      ],
+      "frame_bbox": [
+        71,
+        34,
+        185,
+        222
+      ]
+    },
+    "uv_lamp": {
+      "path": "assets/generated/sprites/components/uv_lamp.png",
+      "sourceCell": [
+        226,
+        502,
+        462,
+        738
+      ],
+      "source_bbox": [
+        51,
+        38,
+        150,
+        214
+      ],
+      "frame_bbox": [
+        78,
+        40,
+        177,
+        216
+      ]
+    },
+    "forceps": {
+      "path": "assets/generated/sprites/components/forceps.png",
+      "sourceCell": [
+        456,
+        502,
+        692,
+        738
+      ],
+      "source_bbox": [
+        31,
+        45,
+        158,
+        213
+      ],
+      "frame_bbox": [
+        64,
+        44,
+        191,
+        212
+      ]
+    },
+    "sterile_gloves": {
+      "path": "assets/generated/sprites/components/sterile_gloves.png",
+      "sourceCell": [
+        686,
+        502,
+        922,
+        738
+      ],
+      "source_bbox": [
+        26,
+        57,
+        189,
+        200
+      ],
+      "frame_bbox": [
+        46,
+        56,
+        209,
+        199
+      ]
+    },
+    "bubble_sterile": {
+      "path": "assets/generated/sprites/components/bubble_sterile.png",
+      "sourceCell": [
+        909,
+        494,
+        1161,
+        746
+      ],
+      "source_bbox": [
+        33,
+        58,
+        196,
+        211
+      ],
+      "frame_bbox": [
+        46,
+        51,
+        209,
+        204
+      ]
+    },
+    "bubble_nonsterile": {
+      "path": "assets/generated/sprites/components/bubble_nonsterile.png",
+      "sourceCell": [
+        1121,
+        494,
+        1373,
+        746
+      ],
+      "source_bbox": [
+        50,
+        54,
+        214,
+        211
+      ],
+      "frame_bbox": [
+        46,
+        49,
+        210,
+        206
+      ]
+    },
+    "star_gold": {
+      "path": "assets/generated/sprites/components/star_gold.png",
+      "sourceCell": [
+        0,
+        726,
+        236,
+        962
+      ],
+      "source_bbox": [
+        48,
+        43,
+        182,
+        175
+      ],
+      "frame_bbox": [
+        61,
+        62,
+        195,
+        194
+      ]
+    },
+    "star_outline": {
+      "path": "assets/generated/sprites/components/star_outline.png",
+      "sourceCell": [
+        226,
+        726,
+        462,
+        962
+      ],
+      "source_bbox": [
+        38,
+        43,
+        170,
+        174
+      ],
+      "frame_bbox": [
+        62,
+        62,
+        194,
+        193
+      ]
+    },
+    "badge_sterile": {
+      "path": "assets/generated/sprites/components/badge_sterile.png",
+      "sourceCell": [
+        456,
+        726,
+        692,
+        962
+      ],
+      "source_bbox": [
+        25,
+        33,
+        171,
+        186
+      ],
+      "frame_bbox": [
+        55,
+        51,
+        201,
+        204
+      ]
+    },
+    "sparkle_burst": {
+      "path": "assets/generated/sprites/components/sparkle_burst.png",
+      "sourceCell": [
+        686,
+        726,
+        922,
+        962
+      ],
+      "source_bbox": [
+        14,
+        30,
+        171,
+        190
+      ],
+      "frame_bbox": [
+        49,
+        48,
+        206,
+        208
+      ]
+    },
+    "explosion_teal_1": {
+      "path": "assets/generated/sprites/components/explosion_teal_1.png",
+      "sourceCell": [
+        917,
+        726,
+        1153,
+        962
+      ],
+      "source_bbox": [
+        17,
+        32,
+        198,
+        184
+      ],
+      "frame_bbox": [
+        37,
+        52,
+        218,
+        204
+      ]
+    },
+    "explosion_teal_2": {
+      "path": "assets/generated/sprites/components/explosion_teal_2.png",
+      "sourceCell": [
+        1137,
+        726,
+        1373,
+        962
+      ],
+      "source_bbox": [
+        34,
+        31,
+        204,
+        185
+      ],
+      "frame_bbox": [
+        43,
+        51,
+        213,
+        205
+      ]
+    },
+    "warning_ring": {
+      "path": "assets/generated/sprites/components/warning_ring.png",
+      "sourceCell": [
+        0,
+        909,
+        236,
+        1145
+      ],
+      "source_bbox": [
+        46,
+        40,
+        181,
+        180
+      ],
+      "frame_bbox": [
+        60,
+        58,
+        195,
+        198
+      ]
+    },
+    "question_popup": {
+      "path": "assets/generated/sprites/components/question_popup.png",
+      "sourceCell": [
+        226,
+        909,
+        462,
+        1145
+      ],
+      "source_bbox": [
+        34,
+        41,
+        158,
+        171
+      ],
+      "frame_bbox": [
+        66,
+        63,
+        190,
+        193
+      ]
+    },
+    "exit_door": {
+      "path": "assets/generated/sprites/components/exit_door.png",
+      "sourceCell": [
+        456,
+        909,
+        692,
+        1145
+      ],
+      "source_bbox": [
+        31,
+        41,
+        177,
+        187
+      ],
+      "frame_bbox": [
+        55,
+        55,
+        201,
+        201
+      ]
+    },
+    "maze_fragment": {
+      "path": "assets/generated/sprites/components/maze_fragment.png",
+      "sourceCell": [
+        686,
+        909,
+        922,
+        1145
+      ],
+      "source_bbox": [
+        17,
+        48,
+        184,
+        184
+      ],
+      "frame_bbox": [
+        44,
+        60,
+        211,
+        196
+      ]
+    },
+    "sterile_pack": {
+      "path": "assets/generated/sprites/components/sterile_pack.png",
+      "sourceCell": [
+        917,
+        909,
+        1153,
+        1145
+      ],
+      "source_bbox": [
+        29,
+        53,
+        187,
+        181
+      ],
+      "frame_bbox": [
+        49,
+        64,
+        207,
+        192
+      ]
+    },
+    "label_sticker": {
+      "path": "assets/generated/sprites/components/label_sticker.png",
+      "sourceCell": [
+        1137,
+        909,
+        1373,
+        1145
+      ],
+      "source_bbox": [
+        35,
+        66,
+        191,
+        169
+      ],
+      "frame_bbox": [
+        50,
+        76,
+        206,
+        179
+      ]
+    }
+  },
+  "sheets": {
+    "nurse_walk": {
+      "path": "assets/generated/sprites/sheets/nurse_walk.png",
+      "frames": [
+        "nurse_walk_1",
+        "nurse_walk_2"
+      ],
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 2,
+      "frameDurationMs": 160
+    },
+    "nurse_attack": {
+      "path": "assets/generated/sprites/sheets/nurse_attack.png",
+      "frames": [
+        "nurse_idle",
+        "nurse_attack"
+      ],
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 2,
+      "frameDurationMs": 130
+    },
+    "virus_pulse": {
+      "path": "assets/generated/sprites/sheets/virus_pulse.png",
+      "frames": [
+        "virus_small",
+        "virus_large",
+        "virus_small"
+      ],
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 3,
+      "frameDurationMs": 180
+    },
+    "bubble_sterile_pop": {
+      "path": "assets/generated/sprites/sheets/bubble_sterile_pop.png",
+      "frames": [
+        "bubble_sterile",
+        "sparkle_burst",
+        "explosion_teal_2"
+      ],
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 3,
+      "frameDurationMs": 120
+    },
+    "bubble_nonsterile_pop": {
+      "path": "assets/generated/sprites/sheets/bubble_nonsterile_pop.png",
+      "frames": [
+        "bubble_nonsterile",
+        "sparkle_burst",
+        "explosion_teal_2"
+      ],
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 3,
+      "frameDurationMs": 120
+    },
+    "star_twinkle": {
+      "path": "assets/generated/sprites/sheets/star_twinkle.png",
+      "frames": [
+        "star_outline",
+        "sparkle_burst",
+        "star_gold"
+      ],
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 3,
+      "frameDurationMs": 140
+    },
+    "block_merge": {
+      "path": "assets/generated/sprites/sheets/block_merge.png",
+      "frames": [
+        "block_sterile",
+        "sparkle_burst",
+        "badge_sterile"
+      ],
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 3,
+      "frameDurationMs": 150
+    },
+    "teal_explosion": {
+      "path": "assets/generated/sprites/sheets/teal_explosion.png",
+      "frames": [
+        "sparkle_burst",
+        "explosion_teal_1",
+        "explosion_teal_2"
+      ],
+      "frameWidth": 256,
+      "frameHeight": 256,
+      "frameCount": 3,
+      "frameDurationMs": 100
+    }
+  },
+  "transparentAtlas": "assets/generated/sprites/aseptic_sprite_atlas_transparent.png"
+}

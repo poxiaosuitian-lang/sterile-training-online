@@ -1,5 +1,7 @@
 {$SITE_ADDRESS} {
     encode gzip zstd
+    @playerWeb path /play /play/*
+    respond @playerWeb 404
     redir / /api/v1/admin 302
     reverse_proxy api:3000
     header {
@@ -8,3 +10,6 @@
         X-Frame-Options DENY
     }
 }
+
+# Optional independent game domain; no game hostname is hard-coded.
+import /etc/caddy/game-sites/*.caddy

@@ -36,8 +36,10 @@ services:
       - '${HTTPS_PORT:-443}:443'
     environment:
       SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      GAME_SITE_ADDRESS: ${GAME_SITE_ADDRESS:-}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./game-sites:/etc/caddy/game-sites:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:

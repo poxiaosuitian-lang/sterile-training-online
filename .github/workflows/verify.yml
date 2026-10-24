@@ -5,6 +5,22 @@ on:
 permissions:
   contents: read
 jobs:
+  verify-player-web:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install playwright
+      - run: python -m playwright install webkit
+      - run: python tools/test_player_web.py --engine webkit
+      - run: python tools/test_browser_audio.py --engine webkit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: webkit-player-screenshots
+          path: tmp/*.png
   verify:
     runs-on: ubuntu-latest
     services:
@@ -40,8 +56,14 @@ jobs:
       - run: sh -n tools/deploy_update.sh
       - run: node tools/test_online_integration.cjs
       - run: docker build -t sterile-training-online:ci .
+      - name: Validate independent admin and player domain configuration
+        run: |
+          mkdir -p /tmp/ark-game-sites
+          docker run --rm -e SITE_ADDRESS=admin.example.test -v "$PWD/deploy/Caddyfile:/etc/caddy/Caddyfile:ro" -v /tmp/ark-game-sites:/etc/caddy/game-sites:ro caddy:2-alpine caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+          cp deploy/game-domain.Caddyfile.example /tmp/ark-game-sites/player.caddy
+          docker run --rm -e SITE_ADDRESS=admin.example.test -e GAME_SITE_ADDRESS=game.example.test -v "$PWD/deploy/Caddyfile:/etc/caddy/Caddyfile:ro" -v /tmp/ark-game-sites:/etc/caddy/game-sites:ro caddy:2-alpine caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
       - name: Verify migration and repair command in production image
         run: >-
           docker run --rm --network host -e DATABASE_URL -e REDIS_URL
           sterile-training-online:ci sh -c
-          'npx prisma migrate deploy && node dist/maintenance/repair-scores.js && node dist/maintenance/repair-scores.js --apply'
+          'test -s public/play/main.dart.js && test -s public/play/assets/assets/generated/levels/level2_doc_scene1_replica_v35.png && test -s public/play/canvaskit/canvaskit.wasm && npx prisma migrate deploy && node dist/maintenance/repair-scores.js && node dist/maintenance/repair-scores.js --apply'

@@ -12,6 +12,8 @@ deploy/releases
 deploy/.env
 *.png
 *.xml
+!public/play/**/*.png
+!public/play/**/*.xml
 .claude
 .kombai
 **/*.jks

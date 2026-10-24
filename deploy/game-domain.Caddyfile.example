@@ -1,0 +1,18 @@
+# Copy to deploy/game-sites/player.caddy after setting GAME_SITE_ADDRESS in .env.
+# GAME_SITE_ADDRESS must differ from SITE_ADDRESS.
+{$GAME_SITE_ADDRESS} {
+    encode gzip zstd
+    redir / /play/ 302
+    @player path /play /play/* /api/v1/auth/* /api/v1/game/* /api/v1/app/access /api/v1/levels /api/v1/levels/*
+    handle @player {
+        reverse_proxy api:3000
+    }
+    handle {
+        respond 404
+    }
+    header {
+        X-Content-Type-Options nosniff
+        Referrer-Policy same-origin
+        X-Frame-Options DENY
+    }
+}
